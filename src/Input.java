@@ -1,19 +1,43 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class Input {
 
   public static void transactionRead(BufferedReader br, List<Transaction> transactionList,
                                      List<Category> categoryList, List<Currency> currencyList) throws IOException {
+
+    Date currentDate = new Date();
+    String dataTest = dateToString(currentDate);
+    System.out.println(dataTest);
+    System.out.println(dateFromString(dataTest));
+
     System.out.println(takeCategory(categoryList));
     System.out.println(takeCurrency(currencyList));
     System.out.println(takeType());
 
 
-
   }
+
+  public static String dateToString(Date currentDate) {
+    SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd.MM.yyyy");
+    return dateFormat.format(currentDate);
+  }
+
+  public static Date dateFromString(String dateString) {
+    Date currentDate = null;
+    SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd.MM.yyyy");
+    try {
+      currentDate = dateFormat.parse(dateString);
+    } catch (Exception e) {
+      System.out.println("Ошибка считывания даты");
+    }
+    return currentDate;
+  }
+
 
   public static TransactionType takeType() throws IOException {
     int lastOfNum = 1;

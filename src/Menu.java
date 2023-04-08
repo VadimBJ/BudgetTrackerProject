@@ -7,7 +7,7 @@ public class Menu {
                               List<Category> categoryList,List<Currency> currencyList) throws IOException {
     System.out.println("""
         Доступные действия:
-          1. Добавить транзакцию
+          1. Создать запись
         """);
     System.out.print("Введите номер пункта меню: ");
     int choice = Input.readIntLimited(1, 2);

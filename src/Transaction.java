@@ -1,9 +1,9 @@
-import javax.xml.crypto.Data;
+import java.util.Date;
 
 public class Transaction {
   private String title;
   private String Description;
-  private Data date;
+  private Date date;
   private double amount;
   private TransactionType type;
   private Category category;
@@ -22,7 +22,7 @@ public class Transaction {
   public Transaction(String title, String description, Category category, TransactionType type, Currency currency, double amount) {
     this.title = title;
     Description = description;
-    //todo this.date = date;   дата и время создания - берем текущую
+    this.date = new Date();
     this.category = category;
     this.type = type;
     this.currency = currency;
@@ -34,7 +34,7 @@ public class Transaction {
     return "\nTransaction{" +
         "title='" + title + '\'' +
         ", \nDescription='" + Description + '\'' +
-        ", \ndate=" + date +
+        ", \ndate=" + Input.dateToString(date) +
         ", \namount=" + amount +
         ", \ntype=" + type.getTitle() +
         ", \ncategory=" + category.getTitle() +
@@ -50,7 +50,7 @@ public class Transaction {
     Description = description;
   }
 
-  public void setDate(Data date) {
+  public void setDate(Date date) {
     this.date = date;
   }
 
@@ -78,7 +78,7 @@ public class Transaction {
     return Description;
   }
 
-  public Data getDate() {
+  public Date getDate() {
     return date;
   }
 

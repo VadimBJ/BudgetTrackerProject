@@ -51,11 +51,11 @@ public class BudgetTrackerRunner {
         currencyList.get(1),
         15000));
 
-    Menu.menuMain(br, transactionList, categoryList,currencyList);
+//    Menu.menuMain(br, transactionList, categoryList,currencyList);
 
 
     //печатаем список трансакций
-//    printList(transactionList);
+    printList(transactionList);
 //    printList(categoryList);
 //    printList(currencyList);
 
