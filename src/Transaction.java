@@ -10,7 +10,7 @@ public class Transaction {
   private Currency currency;
 
   /**
-   * создание транзакции
+   * конструктор транзакции
    *
    * @param title       название
    * @param description описание

@@ -1,6 +1,6 @@
 public enum TransactionType {
-  INCOMING(1, "ДОХОД",0),
-  OUTGOING(2, "РАСХОД",0);
+  INCOMING(1, "\u001B[32mДОХОД\u001B[0m",0),
+  OUTGOING(2, "\u001B[31mРАСХОД\u001B[0m",0);
 
   private int id;
   private String title;

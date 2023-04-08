@@ -1,8 +1,13 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BudgetTrackerRunner {
-  public static void main(String[] args) {
+  public static void main(String[] args) throws IOException {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
     //инициализация категорий
     List<Category> categoryList = new ArrayList<>();
     categoryList.add(new Category("Коммунальные платежи", 0));
@@ -46,10 +51,13 @@ public class BudgetTrackerRunner {
         currencyList.get(1),
         15000));
 
+    Menu.menuMain(br, transactionList, categoryList,currencyList);
+
+
     //печатаем список трансакций
-    printList(transactionList);
-    printList(categoryList);
-    printList(currencyList);
+//    printList(transactionList);
+//    printList(categoryList);
+//    printList(currencyList);
 
   }
 
