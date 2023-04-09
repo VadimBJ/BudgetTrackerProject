@@ -7,7 +7,7 @@ public class Menu implements Finals {
   private static boolean isPlaying = true;
 
   public static void menuMain(BufferedReader br, List<Transaction> transactionList,
-                               List<Currency> currencyList) throws IOException {
+                              List<Currency> currencyList) throws IOException {
     while (isPlaying) {
       System.out.println();
       System.out.println(BLUE + "[ ОСНОВНОЕ МЕНЮ ]" + RESET);
@@ -16,7 +16,7 @@ public class Menu implements Finals {
             𝟙. Создать запись
             𝟚. Добавить категорию
             𝟛. Печатать все записи
-            𝟜. 
+            𝟜. Запись файла
             𝟝. 
             𝟞. 
             𝟟. 
@@ -26,17 +26,18 @@ public class Menu implements Finals {
       System.out.print("Введите номер пункта меню: ");
       int choice = Input.readIntLimited(1, 9);
       switch (choice) {
-        case 1 -> Input.transactionRead(br, transactionList,  currencyList);
+        case 1 -> Input.transactionRead(br, transactionList, currencyList);
         case 2 -> Input.addCategory(br);
-        case 3 -> Output.printTransactionAll(currencyList,transactionList);
+        case 3 -> Output.printTransactionAll(transactionList, currencyList);
+        case 4 -> Output.writeToFile(transactionList, currencyList);
 
 
-
-          case 9 -> isPlaying=false;
+        case 9 -> isPlaying = false;
         default -> System.out.println("default");
-
       }
 
+
+      isPlaying = false;
     }
   }
 }

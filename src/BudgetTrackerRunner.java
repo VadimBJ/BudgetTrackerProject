@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 public class BudgetTrackerRunner implements Finals {
-    public static void main(String[] args) throws IOException {
+  public static void main(String[] args) throws IOException {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     //инициализация категорий
@@ -16,7 +16,6 @@ public class BudgetTrackerRunner implements Finals {
     TransactionType.INCOMING.getCategoryList().add(new Category("Инвестиции", 0));
     TransactionType.INCOMING.getCategoryList().add(new Category("Аренда недвижимости", 0));
     TransactionType.INCOMING.getCategoryList().add(new Category("Продажа", 0));
-
 
 
     TransactionType.OUTGOING.getCategoryList().add(new Category("Жилье и коммунальные услуги", 0));
@@ -73,14 +72,12 @@ public class BudgetTrackerRunner implements Finals {
 
 
     //печатаем список трансакций
-    Output.printList(transactionList);
+//    Output.printList(transactionList);
 //    printList(categoryList);
-    Output.printList(currencyList);
+//    Output.printList(currencyList);
 
 
   }
-
-
 
 
 }
