@@ -28,7 +28,7 @@ public class Menu implements Finals {
       switch (choice) {
         case 1 -> Input.transactionRead(br, transactionList,  currencyList);
         case 2 -> Input.addCategory(br);
-        case 3 -> Output.printCurrencyTotal(currencyList);
+        case 3 -> Output.printTransactionAll(currencyList,transactionList);
 
 
 
