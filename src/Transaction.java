@@ -1,13 +1,13 @@
 import java.util.Date;
 
-public class Transaction {
+public class Transaction implements Finals {
   private String title;
-  private String Description;
+  private String description;
   private Date date;
-  private double amount;
   private TransactionType type;
   private Category category;
   private Currency currency;
+  private double amount;
 
   /**
    * конструктор транзакции
@@ -19,27 +19,34 @@ public class Transaction {
    * @param currency    валюта
    * @param amount      сумма транзакции
    */
-  public Transaction(String title, String description, Category category, TransactionType type, Currency currency, double amount) {
+  public Transaction(String title, String description, TransactionType type, Category category, Currency currency,
+                     double amount, Date date) {
     this.title = title;
-    Description = description;
-    this.date = new Date();
-    this.category = category;
+    this.description = description;
+    this.date = date;
     this.type = type;
+    this.category = category;
     this.currency = currency;
+    currency.setTotal(currency.getTotal() + amount);
     this.amount = amount;
   }
 
   @Override
   public String toString() {
-    return "\nTransaction{" +
-        "title='" + title + '\'' +
-        ", \nDescription='" + Description + '\'' +
-        ", \ndate=" + Input.dateToString(date) +
-        ", \namount=" + amount +
-        ", \ntype=" + type.getTitle() +
-        ", \ncategory=" + category.getTitle() +
-        ", \ncurrency=" + currency.getTitle() +
-        '}';
+    String sign = type == TransactionType.INCOMING ? "➕" : "➖";
+    String summa = String.format("%s%.2f %s", sign, Math.abs(amount), currency.getAcronym());
+    String shortDescription = description;
+    if (!description.isEmpty()) {
+      shortDescription = (title.length() + description.length() + 2) > 80 ?
+          title + ": " + description.substring(0, 75 - title.length()) + ".." : title + ": " + description;
+    } else shortDescription = title;
+
+    return String.format("""
+            │    %-12s       |   %s%-60s%s  %16s │
+            │ %-15s   %-80s\u2009\u2009│%n""",
+        type.getTitle(), BLUE, category.getTitle(), RESET, Input.dateToString(date), summa, shortDescription)
+        +"├"+"─".repeat(101)+"┤";
+
   }
 
   public void setTitle(String title) {
@@ -47,7 +54,7 @@ public class Transaction {
   }
 
   public void setDescription(String description) {
-    Description = description;
+    description = description;
   }
 
   public void setDate(Date date) {
@@ -75,7 +82,7 @@ public class Transaction {
   }
 
   public String getDescription() {
-    return Description;
+    return description;
   }
 
   public Date getDate() {

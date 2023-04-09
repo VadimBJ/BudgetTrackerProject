@@ -14,12 +14,8 @@ public class Currency {
 
   @Override
   public String toString() {
-    return "Currency{" +
-        "id=" + id +
-        ", title='" + title + '\'' +
-        ", acronym='" + acronym + '\'' +
-        ", total=" + total +
-        '}';
+    String line = String.format("%s : %12.2f %3s",title,total,acronym);
+    return String.format("│ %99s │",line);
   }
 
   public static int getCounter() {

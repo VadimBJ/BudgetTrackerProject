@@ -5,31 +5,62 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class Input {
+public class Input implements Finals {
+  public static void addCategory(BufferedReader br) throws IOException {
+    TransactionType transactionType = takeType();
+    String title;
+    do {
+      System.out.print("Введите название категории: ");
+      title = br.readLine();
+      if (title.trim().isEmpty()) {
+        System.out.println(RED + "Поле 'Название' не может быть пустым!" + RESET);
+      }
+    } while (title.trim().isEmpty());
+    transactionType.getCategoryList().add(new Category(title, 0));
+  }
 
   public static void transactionRead(BufferedReader br, List<Transaction> transactionList,
-                                     List<Category> categoryList, List<Currency> currencyList) throws IOException {
+                                     List<Currency> currencyList) throws IOException {
 
-    Date currentDate = new Date();
-    String dataTest = dateToString(currentDate);
-    System.out.println(dataTest);
-    System.out.println(dateFromString(dataTest));
+    System.out.println(BLUE + "[ СОЗДАНИЕ НОВОЙ ЗАПИСИ ]" + RESET);
+    String title;
+    do {
+      System.out.print("Введите название для записи: ");
+      title = br.readLine();
+      if (title.trim().isEmpty()) {
+        System.out.println(RED + "Поле 'Название' не может быть пустым!" + RESET);
+      }
+    } while (title.trim().isEmpty());
 
-    System.out.println(takeCategory(categoryList));
-    System.out.println(takeCurrency(currencyList));
-    System.out.println(takeType());
+    System.out.println(CYAN + "Поле 'Описание' может быть пустым" + RESET);
+    System.out.print("Введите детальное описание задачи: ");
+    String description = br.readLine().trim();
 
+    TransactionType transactionType = takeType();
+
+    Category category = takeCategory(transactionType);
+
+    Currency currency = takeCurrency(currencyList);
+
+    System.out.print("Введите сумму операции: ");
+    double amount = Math.abs(readDoubleLimited(-Double.MAX_VALUE, Double.MAX_VALUE));
+    amount = transactionType == TransactionType.INCOMING ? amount : -amount;
+
+
+    Date date = new Date();
+
+    transactionList.add(new Transaction(title, description, transactionType, category, currency, amount, date));
 
   }
 
   public static String dateToString(Date currentDate) {
-    SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd.MM.yyyy");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy  HH:mm");
     return dateFormat.format(currentDate);
   }
 
   public static Date dateFromString(String dateString) {
     Date currentDate = null;
-    SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd.MM.yyyy");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy  HH:mm");
     try {
       currentDate = dateFormat.parse(dateString);
     } catch (Exception e) {
@@ -38,10 +69,9 @@ public class Input {
     return currentDate;
   }
 
-
   public static TransactionType takeType() throws IOException {
     int lastOfNum = 1;
-    System.out.println("Выберите тип задачи:");
+    System.out.println("Выберите тип операции:");
     for (TransactionType values : TransactionType.values()) {
       System.out.println("  " + values.getId() + ". " + values.getTitle());
       lastOfNum = values.getId();
@@ -57,7 +87,8 @@ public class Input {
     return priority;
   }
 
-  public static Category takeCategory(List<Category> categoryList) throws IOException {
+  public static Category takeCategory(TransactionType transactionType) throws IOException {
+    List<Category> categoryList = transactionType.getCategoryList();
     System.out.println("Выберите категорию:");
     for (int i = 0; i < categoryList.size(); i++) {
       System.out.println("  " + (i + 1) + ". " + categoryList.get(i).getTitle());
@@ -88,6 +119,22 @@ public class Input {
       }
       if (!(num >= min && num <= max)) {
         System.out.printf("Введите число от %d до %d: ", min, max);
+      }
+    } while (!(num >= min && num <= max));
+    return num;
+  }
+
+  public static double readDoubleLimited(double min, double max) throws IOException {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    double num = 0;
+    do {
+      try {
+        num = Double.parseDouble(br.readLine());
+      } catch (NumberFormatException e) {
+        System.out.println("\u001B[31mВводите только цифры!\u001B[0m");
+      }
+      if (!(num >= min && num <= max)) {
+        System.out.printf("Введите число от %f до %f: ", min, max);
       }
     } while (!(num >= min && num <= max));
     return num;

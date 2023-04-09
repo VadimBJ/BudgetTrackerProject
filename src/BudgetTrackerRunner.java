@@ -2,22 +2,35 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class BudgetTrackerRunner {
+public class BudgetTrackerRunner implements Finals {
   public static void main(String[] args) throws IOException {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     //инициализация категорий
-    List<Category> categoryList = new ArrayList<>();
-    categoryList.add(new Category("Коммунальные платежи", 0));
-    categoryList.add(new Category("Машина", 0));
-    categoryList.add(new Category("Зарплата", 0));
+    TransactionType.INCOMING.getCategoryList().add(new Category("Зарплата", 0));
+    TransactionType.INCOMING.getCategoryList().add(new Category("Премии/бонусы", 0));
+    TransactionType.INCOMING.getCategoryList().add(new Category("Дивиденды", 0));
+    TransactionType.INCOMING.getCategoryList().add(new Category("Инвестиции", 0));
+    TransactionType.INCOMING.getCategoryList().add(new Category("Аренда недвижимости", 0));
+    TransactionType.INCOMING.getCategoryList().add(new Category("Продажа", 0));
+
+
+
+    TransactionType.OUTGOING.getCategoryList().add(new Category("Жилье и коммунальные услуги", 0));
+    TransactionType.OUTGOING.getCategoryList().add(new Category("Транспорт", 0));
+    TransactionType.OUTGOING.getCategoryList().add(new Category("Продукты", 0));
+    TransactionType.OUTGOING.getCategoryList().add(new Category("Медицинские услуги и лекарства", 0));
+    TransactionType.OUTGOING.getCategoryList().add(new Category("Одежда и обувь", 0));
+    TransactionType.OUTGOING.getCategoryList().add(new Category("Покупка", 0));
+
 
     //инициализация валют
     List<Currency> currencyList = new ArrayList<>();
-    currencyList.add(new Currency("US dollar's", "USD", 0));
-    currencyList.add(new Currency("EURO's", "EUR", 0));
+    currencyList.add(new Currency("US dollar", "USD", 0));
+    currencyList.add(new Currency("EURO", "EUR", 0));
     currencyList.add(new Currency("Гривнi", "UAH", 0));
 
     //создание трансакций
@@ -25,47 +38,49 @@ public class BudgetTrackerRunner {
     transactionList.add(new Transaction(
         "Оплата комуналки",
         "Комуналка за март",
-        categoryList.get(0),
         TransactionType.OUTGOING,
+        TransactionType.OUTGOING.getCategoryList().get(0),
         currencyList.get(2),
-        -800));
+        -800, new Date()));
     transactionList.add(new Transaction(
         "Зарплата",
         "Зарплата за март",
-        categoryList.get(2),
         TransactionType.INCOMING,
+        TransactionType.INCOMING.getCategoryList().get(0),
         currencyList.get(2),
-        18000));
+        18000, new Date()));
     transactionList.add(new Transaction(
         "Ремонт машины",
-        "Замена опорного подшипника",
-        categoryList.get(1),
+        "Замена опорного подшипника, замена масла и фильтров, ремонт подвески и тормозной системы",
         TransactionType.OUTGOING,
+        TransactionType.OUTGOING.getCategoryList().get(1),
         currencyList.get(1),
-        -250));
+        -250, new Date()));
     transactionList.add(new Transaction(
         "Продажа машины",
         "",
-        categoryList.get(1),
         TransactionType.INCOMING,
+        TransactionType.INCOMING.getCategoryList().get(5),
         currencyList.get(1),
-        15000));
+        15000, new Date()));
 
-//    Menu.menuMain(br, transactionList, categoryList,currencyList);
+
+//    System.out.printf(LOGO, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW,
+//        BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, RESET);
+
+
+    Menu.menuMain(br, transactionList, currencyList);
 
 
     //печатаем список трансакций
-    printList(transactionList);
+    Output.printList(transactionList);
 //    printList(categoryList);
-//    printList(currencyList);
+    Output.printList(currencyList);
+
 
   }
 
-  public static void printList(List<?> listToPrint) {
-    for (Object obj : listToPrint) {
-      System.out.println(obj);
-    }
-  }
+
 
 
 }

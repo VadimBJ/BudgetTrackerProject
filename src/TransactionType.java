@@ -1,15 +1,22 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public enum TransactionType {
-  INCOMING(1, "\u001B[32mДОХОД\u001B[0m",0),
-  OUTGOING(2, "\u001B[31mРАСХОД\u001B[0m",0);
+  INCOMING(1, "\u001B[32mДОХОД \u001B[0m",new ArrayList<>()),
+  OUTGOING(2, "\u001B[31mРАСХОД\u001B[0m",new ArrayList<>());
 
   private int id;
   private String title;
-  private double total;
+  private List<Category> categoryList;
 
-  TransactionType(int id, String title, double total) {
+  TransactionType(int id, String title, List<Category> categoryList) {
     this.id = id;
     this.title = title;
-    this.total = total;
+    this.categoryList = categoryList;
+  }
+
+  public void setCategoryList(List<Category> categoryList) {
+    this.categoryList = categoryList;
   }
 
   public int getId() {
@@ -20,19 +27,7 @@ public enum TransactionType {
     return title;
   }
 
-  public double getTotal() {
-    return total;
-  }
-
-  public void setId(int id) {
-    this.id = id;
-  }
-
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
-  public void setTotal(double total) {
-    this.total = total;
+  public List<Category> getCategoryList() {
+    return categoryList;
   }
 }
