@@ -1,13 +1,13 @@
 import java.util.Date;
 
 public class Transaction implements Finals, Comparable<Transaction> {
-  private String title;
-  private String description;
-  private Date date;
-  private TransactionType type;
-  private Category category;
-  private Currency currency;
-  private double amount;
+  private final String title;
+  private final String description;
+  private final Date date;
+  private final TransactionType type;
+  private final Category category;
+  private final Currency currency;
+  private final double amount;
 
   /**
    * конструктор транзакции
@@ -35,7 +35,7 @@ public class Transaction implements Finals, Comparable<Transaction> {
   public String toString() {
     String sign = type == TransactionType.INCOMING ? "➕" : "➖";
     String summa = String.format("%s%.2f %s", sign, Math.abs(amount), currency.getAcronym());
-    String shortDescription = description;
+    String shortDescription;
     if (!description.isEmpty()) {
       shortDescription = (title.length() + description.length() + 2) > 80 ?
           title + ": " + description.substring(0, 75 - title.length()) + ".." : title + ": " + description;
@@ -52,7 +52,7 @@ public class Transaction implements Finals, Comparable<Transaction> {
   public String printString(int i) {
     String sign = type == TransactionType.INCOMING ? "➕" : "➖";
     String summa = String.format("%s%.2f %s", sign, Math.abs(amount), currency.getAcronym());
-    String shortDescription = description;
+    String shortDescription;
     if (!description.isEmpty()) {
       shortDescription = (title.length() + description.length() + 2) > 80 ?
           title + ": " + description.substring(0, 75 - title.length()) + ".." : title + ": " + description;
@@ -65,34 +65,6 @@ public class Transaction implements Finals, Comparable<Transaction> {
         type.getTitle(), BLUE, category.getTitle(), RESET, Input.dateToString(date,"dd.MM.yyyy  HH:mm"),num, summa, shortDescription)
         + "      ├" + "─".repeat(101) + "┤";
 
-  }
-
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
-  public void setDescription(String description) {
-    description = description;
-  }
-
-  public void setDate(Date date) {
-    this.date = date;
-  }
-
-  public void setAmount(double amount) {
-    this.amount = amount;
-  }
-
-  public void setType(TransactionType type) {
-    this.type = type;
-  }
-
-  public void setCategory(Category category) {
-    this.category = category;
-  }
-
-  public void setCurrency(Currency currency) {
-    this.currency = currency;
   }
 
   public String getTitle() {

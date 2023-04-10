@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.*;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -88,7 +87,8 @@ public class Output implements Finals {
     System.out.println("      ╰" + "─".repeat(101) + "╯");
   }
 
-  public static void printTransactionAll(List<Transaction> transactionList, List<Currency> currencyList) throws AWTException, InterruptedException {
+  public static void printTransactionAll(BufferedReader br, List<Transaction> transactionList,
+                                         List<Currency> currencyList) throws AWTException, InterruptedException, IOException {
     clearScreen();
     printCurrencyTotal(currencyList);
     String title = String.format("[%s Показано записей: %d    Период: с %s по %s %s]", YELLOW, transactionList.size(),
@@ -102,6 +102,7 @@ public class Output implements Finals {
       System.out.println(transactionList.get(i).printString(i + 1));
     }
     System.out.println("      ╰" + "─".repeat(101) + "╯");
+    Menu.menuAfterTransactionListEnds(br, transactionList, currencyList);
   }
 
   public static void clearScreen() throws AWTException, InterruptedException {
@@ -128,7 +129,7 @@ public class Output implements Finals {
         current = end;
       }
       String title = String.format("[%s Показано записей: %d из %d    Период: с %s по %s %s]", YELLOW, current, end,
-          Input.dateToString(transactionList.get(transactionList.size() - 1).getDate(), "dd.MM.yyyy"),
+          Input.dateToString(transactionList.get(end - 1).getDate(), "dd.MM.yyyy"),
           Input.dateToString(transactionList.get(0).getDate(), "dd.MM.yyyy"), RESET);
       int left = 101 / 2 - title.length() / 2;
       int right = 101 - left - title.length();
@@ -144,12 +145,15 @@ public class Output implements Finals {
         System.out.print("➤ ");
         answer = br.readLine().trim();
       } else {
-        answer = "menu";
+        answer = "";
         System.out.println("      ╰" + "─".repeat(101) + "╯");
+        Menu.menuAfterTransactionListEnds(br, transactionList, currencyList);
+        end = transactionList.size();
       }
       if (!answer.isEmpty()) {
         Menu.menuAnderTransactionList(br, transactionList, currencyList);
         --j;
+        end = transactionList.size();
       }
     }
   }
@@ -192,6 +196,6 @@ public class Output implements Finals {
     System.out.println("│    " + date);
     System.out.println("╰" + "─".repeat(45) + "┈┈┈┈┈┄┄┄┄┄┄");
 
-    Menu.menuAnderTransactionView(br, transactionList, currencyList,index-1);
+    Menu.menuAnderTransactionView(br, transactionList, currencyList, index - 1);
   }
 }

@@ -82,7 +82,6 @@ public class Input implements Finals {
 
   public static void addTransaction(BufferedReader br, List<Transaction> transactionList,
                                     List<Currency> currencyList) throws IOException {
-
     System.out.println(BLUE + "[ СОЗДАНИЕ НОВОЙ ЗАПИСИ ]" + RESET);
     String title;
     do {
@@ -92,28 +91,19 @@ public class Input implements Finals {
         System.out.println(RED + "Поле 'Название' не может быть пустым!" + RESET);
       }
     } while (title.trim().isEmpty());
-
     System.out.println(CYAN + "Поле 'Описание' может быть пустым" + RESET);
     System.out.print("Введите детальное описание задачи: ");
     String description = br.readLine().trim();
-
     TransactionType transactionType = takeType();
-
     Category category = takeCategory(transactionType);
-
     Currency currency = takeCurrency(currencyList);
-
     System.out.print("Введите сумму операции: ");
     double amount = Math.abs(readDoubleLimited(-Double.MAX_VALUE, Double.MAX_VALUE));
     amount = transactionType == TransactionType.INCOMING ? amount : -amount;
-
-
     Date date = new Date();
-
     transactionList.add(new Transaction(title, description, transactionType, category, currency, amount, date));
-    System.out.println(GREEN+"... Запись добавлена ..."+RESET);
+    System.out.println(GREEN + "... Запись добавлена ..." + RESET);
     Collections.sort(transactionList);
-
   }
 
   public static String dateToString(Date currentDate, String format) {
@@ -127,7 +117,7 @@ public class Input implements Finals {
     try {
       currentDate = dateFormat.parse(dateString);
     } catch (Exception e) {
-      System.out.println("Ошибка считывания даты: "+dateString);
+      System.out.println("Ошибка считывания даты: " + dateString);
     }
     return currentDate;
   }

@@ -1,15 +1,14 @@
 public interface Finals {
-  public static final String RESET = "\u001B[0m";
-  public static final String RED = "\u001B[31m";
-  public static final String GREEN = "\u001B[32m";
-  public static final String YELLOW = "\u001B[33m";
-  public static final String BLUE = "\u001B[34m";
-  public static final String PURPLE = "\u001B[35m";
-  public static final String CYAN = "\u001B[36m";
+  String RESET = "\u001B[0m";
+  String RED = "\u001B[31m";
+  String GREEN = "\u001B[32m";
+  String YELLOW = "\u001B[33m";
+  String BLUE = "\u001B[34m";
+  String PURPLE = "\u001B[35m";
+  String CYAN = "\u001B[36m";
 
-  String nnnn = "𝟘 𝟙 𝟚 𝟛 𝟜 𝟝 𝟞 𝟟 𝟠 𝟡 ";
 
-  public static final String LOGO = """
+  String LOGO = """
       %s⠀⠀⠀⠀⢠⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣤⣀⣀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
       ⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⠿⠿⠿⠿⠿⠿⠿⠿⣿⣿⣿⣿⣷⣶⣤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
       ⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀   ⠀⠀⠀⠀⠉⠉⠛⠿⣿⣿⣷⣦⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -36,10 +35,66 @@ public interface Finals {
       %s⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⠟⠛⠉⠀⠀⠀⠀⠀⠀⠀%s⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⢿⣿⣿⣿⣿⣿⠀ ⠀⠀⣿⣿⣿⣿⣿⡇⠀⠀⠙⣿⣿⣿⣿⣿⠀ ⠀⠀⠀⢀⣴⠆⠀⣿⣿⣿⣿⣿⣿⠀ ⠘⢿⣿⣿⣿⣿⣷⡀⠀⠻⣿⣿⣿⣿⠀ ⠀⠀⠀⠀⣠⡶⠀⠀⢸⣿⣿⣿⣿⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀
       %s⠀⠀⠀⠀⠈⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀%s⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⣿⣿⣿⣿⣿⣿⣿⡇⠀⠀⠿⠿⠿⠿⠿⠇⠀⠀⠀⠀⠀⠀⠙⠿⣿⣿⣿⡤⠴⠚⠿⠿⠿⠿⠿⠧⠀ ⠀⠀⠈⠛⠿⢿⣿⣄⣠⡤⠖⠋⠁⠀⠀⠿⠿⠿⠿⠿⠿⠀ ⠀⠈⠻⠿⠿⠿⠿⠿⠦⠀⠈⠛⠿⢿⣄⣀⣤⠴⠞⠋⠀⠀⠀⠸⠿⠿⠿⠿⠿⠇⠀%s%n⠀""";
 
-  public static final String LOGO2 = String.format("""
+  String LOGO2 = String.format("""
               
       %s   ┌─                ─┐
       %s═══╡│%s Budget Tracker%s │╞════════━━━━━┅┅┅┅┅┅┄┄%s┄┄┄┈┈┈┈
       %s   └─                ─┘%s
         """, YELLOW, CYAN, YELLOW, CYAN, YELLOW, CYAN, RESET);
+
+
+  /*
+      "𝟘 𝟙 𝟚 𝟛 𝟜 𝟝 𝟞 𝟟 𝟠 𝟡 "
+    //инициализация категорий
+    TransactionType.INCOMING.getCategoryList().add(new Category("Зарплата"));
+    TransactionType.INCOMING.getCategoryList().add(new Category("Премии/бонусы"));
+    TransactionType.INCOMING.getCategoryList().add(new Category("Дивиденды"));
+    TransactionType.INCOMING.getCategoryList().add(new Category("Инвестиции"));
+    TransactionType.INCOMING.getCategoryList().add(new Category("Аренда недвижимости"));
+    TransactionType.INCOMING.getCategoryList().add(new Category("Продажа"));
+
+
+    TransactionType.OUTGOING.getCategoryList().add(new Category("Жилье и коммунальные услуги"));
+    TransactionType.OUTGOING.getCategoryList().add(new Category("Транспорт"));
+    TransactionType.OUTGOING.getCategoryList().add(new Category("Продукты"));
+    TransactionType.OUTGOING.getCategoryList().add(new Category("Медицинские услуги и лекарства"));
+    TransactionType.OUTGOING.getCategoryList().add(new Category("Одежда и обувь"));
+    TransactionType.OUTGOING.getCategoryList().add(new Category("Покупка"));
+
+
+    //инициализация валют
+    currencyList.add(new Currency("US dollar", "USD", 0));
+    currencyList.add(new Currency("EURO", "EUR", 0));
+    currencyList.add(new Currency("Гривнi", "UAH", 0));
+
+    //создание трансакций
+    transactionList.add(new Transaction(
+        "Оплата комуналки",
+        "Комуналка за март",
+        TransactionType.OUTGOING,
+        TransactionType.OUTGOING.getCategoryList().get(0),
+        currencyList.get(2),
+        -800, new Date()));
+    transactionList.add(new Transaction(
+        "Зарплата",
+        "Зарплата за март",
+        TransactionType.INCOMING,
+        TransactionType.INCOMING.getCategoryList().get(0),
+        currencyList.get(2),
+        18000, new Date()));
+    transactionList.add(new Transaction(
+        "Ремонт машины",
+        "Замена опорного подшипника, замена масла и фильтров, ремонт подвески и тормозной системы",
+        TransactionType.OUTGOING,
+        TransactionType.OUTGOING.getCategoryList().get(1),
+        currencyList.get(1),
+        -250, new Date()));
+    transactionList.add(new Transaction(
+        "Продажа машины",
+        "",
+        TransactionType.INCOMING,
+        TransactionType.INCOMING.getCategoryList().get(5),
+        currencyList.get(1),
+        15000, new Date()));
+ */
 }
