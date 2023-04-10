@@ -68,11 +68,15 @@ public class BudgetTrackerRunner implements Finals {
 
  */
 
-//    System.out.printf(LOGO, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW,
-//        BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, RESET);
+    System.out.printf(LOGO, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW,
+        BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, RESET);
 
     Input.readFromFile(transactionList, currencyList);
     Collections.sort(transactionList);
+    System.out.println(" ");
+    String enter = br.readLine();
+    System.out.println(enter);
+
     Menu.menuMain(br, transactionList, currencyList);
 
 
