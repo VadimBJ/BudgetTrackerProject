@@ -1,6 +1,6 @@
 import java.util.Date;
 
-public class Transaction implements Finals {
+public class Transaction implements Finals, Comparable<Transaction> {
   private String title;
   private String description;
   private Date date;
@@ -42,10 +42,28 @@ public class Transaction implements Finals {
     } else shortDescription = title;
 
     return String.format("""
-            │    %-12s       |   %s%-60s%s  %16s │
-            │ %-15s   %-80s\u2009\u2009│%n""",
+               │    %-12s       |   %s%-60s%s  %16s │
+            1. │ %-15s   %-80s\u2009\u2009│%n""",
         type.getTitle(), BLUE, category.getTitle(), RESET, Input.dateToString(date), summa, shortDescription)
-        +"├"+"─".repeat(101)+"┤";
+        + "    ├" + "─".repeat(101) + "┤";
+
+  }
+
+  public String printString(int i) {
+    String sign = type == TransactionType.INCOMING ? "➕" : "➖";
+    String summa = String.format("%s%.2f %s", sign, Math.abs(amount), currency.getAcronym());
+    String shortDescription = description;
+    if (!description.isEmpty()) {
+      shortDescription = (title.length() + description.length() + 2) > 80 ?
+          title + ": " + description.substring(0, 75 - title.length()) + ".." : title + ": " + description;
+    } else shortDescription = title;
+    String num = "000" + i;
+    num = num.substring(num.length()-3);
+    return String.format("""
+                  │    %-12s       |   %s%-60s%s  %16s │
+            %5s │ %-15s   %-80s\u2009\u2009│%n""",
+        type.getTitle(), BLUE, category.getTitle(), RESET, Input.dateToString(date),num, summa, shortDescription)
+        + "      ├" + "─".repeat(101) + "┤";
 
   }
 
@@ -103,5 +121,10 @@ public class Transaction implements Finals {
 
   public Currency getCurrency() {
     return currency;
+  }
+
+  @Override
+  public int compareTo(Transaction obj) {
+    return obj.getDate().compareTo(this.date);
   }
 }

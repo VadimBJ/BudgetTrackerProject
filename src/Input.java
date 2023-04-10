@@ -79,8 +79,8 @@ public class Input implements Finals {
     transactionType.getCategoryList().add(new Category(title));
   }
 
-  public static void transactionRead(BufferedReader br, List<Transaction> transactionList,
-                                     List<Currency> currencyList) throws IOException {
+  public static void addTransaction(BufferedReader br, List<Transaction> transactionList,
+                                    List<Currency> currencyList) throws IOException {
 
     System.out.println(BLUE + "[ СОЗДАНИЕ НОВОЙ ЗАПИСИ ]" + RESET);
     String title;
@@ -123,7 +123,6 @@ public class Input implements Finals {
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy  HH:mm");
     try {
       currentDate = dateFormat.parse(dateString);
-      System.out.println("data: "+dateString);
     } catch (Exception e) {
       System.out.println("Ошибка считывания даты: "+dateString);
     }

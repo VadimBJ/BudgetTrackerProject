@@ -48,7 +48,6 @@ public class Output implements Finals {
     for (Currency currency : currencyList) {
       resultStr.append(currency.getTitle()).append(";");
       resultStr.append(currency.getAcronym()).append(";");
-//      resultStr.append(currency.getTotal()).append(";");
     }
     resultStr.deleteCharAt(resultStr.length() - 1);
     fileWriter.write(resultStr + "\n");
@@ -83,15 +82,28 @@ public class Output implements Finals {
   }
 
   public static void printCurrencyTotal(List<Currency> currencyList) {
-    System.out.println("┌" + "─".repeat(37) + "[\u001B[34m Общая сумма по валютам \u001B[0m]" + "─".repeat(38) + "┐");
+    System.out.println("      ┌" + "─".repeat(37) + "[\u001B[34m Общая сумма по валютам \u001B[0m]" + "─".repeat(38) + "┐");
     printList(currencyList);
-    System.out.println("└" + "─".repeat(101) + "┘");
+    System.out.println("      └" + "─".repeat(101) + "┘");
   }
 
-  public static void printTransactionAll(List<Transaction> transactionList, List<Currency> currencyList) {
+  public static void printTransactionAll(List<Transaction> transactionList, List<Currency> currencyList, String title) {
     printCurrencyTotal(currencyList);
-    System.out.println("┌" + "─".repeat(101) + "┐");
-    printList(transactionList);
-    System.out.println("└" + "─".repeat(101) + "┘");
+    if (title.trim().isEmpty()) {
+      title = title.trim();
+    } else {
+      title = "[ " + BLUE + title + RESET + " ]";
+    }
+    int left = 101 / 2 - title.length() / 2;
+    int right = 101 - left - title.length();
+
+    System.out.println("      ┌" + "─".repeat(left + 5) + title + "─".repeat(right + 4) + "┐");
+//    System.out.println("      ┌" + "─".repeat(101) + "┐");
+    for (int i = 0; i < transactionList.size(); i++) {
+      System.out.println(transactionList.get(i).printString(i+1));
+    }
+
+//    printList(transactionList);
+    System.out.println("      └" + "─".repeat(101) + "┘");
   }
 }

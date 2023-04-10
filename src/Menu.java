@@ -1,5 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -18,7 +20,7 @@ public class Menu implements Finals {
             𝟛. Печатать все записи
             𝟜. Запись файла
             𝟝. считать файл
-            𝟞. 
+            𝟞. сортировка
             𝟟. 
             𝟠.
             𝟡.
@@ -26,11 +28,12 @@ public class Menu implements Finals {
       System.out.print("Введите номер пункта меню: ");
       int choice = Input.readIntLimited(1, 9);
       switch (choice) {
-        case 1 -> Input.transactionRead(br, transactionList, currencyList);
+        case 1 -> Input.addTransaction(br, transactionList, currencyList);
         case 2 -> Input.addCategory(br);
-        case 3 -> Output.printTransactionAll(transactionList, currencyList);
+        case 3 -> Output.printTransactionAll(transactionList, currencyList,"трататататата");
         case 4 -> Output.writeToFile(transactionList, currencyList);
         case 5 -> Input.readFromFile(transactionList, currencyList);
+        case 6 -> Collections.sort(transactionList);
 
 
 
