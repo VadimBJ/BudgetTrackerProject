@@ -30,7 +30,7 @@ public class Menu implements Finals {
       switch (choice) {
         case 1 -> Input.addTransaction(br, transactionList, currencyList);
         case 2 -> Input.addCategory(br);
-        case 3 -> Output.printTransactionAll(transactionList, currencyList,"трататататата");
+        case 3 -> Output.printTransactionAll(transactionList, currencyList,"Показано: 10 из 100     Период: с 01.03.2022 по 20.04.2023");
         case 4 -> Output.writeToFile(transactionList, currencyList);
         case 5 -> Input.readFromFile(transactionList, currencyList);
         case 6 -> Collections.sort(transactionList);

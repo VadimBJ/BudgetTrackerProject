@@ -89,10 +89,10 @@ public class Output implements Finals {
 
   public static void printTransactionAll(List<Transaction> transactionList, List<Currency> currencyList, String title) {
     printCurrencyTotal(currencyList);
-    if (title.trim().isEmpty()) {
+    if (title.trim().isEmpty()) { //todo итерация по 10, передаем в метод с границами цикла по списку
       title = title.trim();
     } else {
-      title = "[ " + BLUE + title + RESET + " ]";
+      title = "[ " + YELLOW + title + RESET + " ]";
     }
     int left = 101 / 2 - title.length() / 2;
     int right = 101 - left - title.length();
