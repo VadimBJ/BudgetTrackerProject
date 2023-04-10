@@ -1,5 +1,6 @@
 import java.io.*;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -110,11 +111,13 @@ public class Input implements Finals {
     Date date = new Date();
 
     transactionList.add(new Transaction(title, description, transactionType, category, currency, amount, date));
+    System.out.println(GREEN+"... Запись добавлена ..."+RESET);
+    Collections.sort(transactionList);
 
   }
 
-  public static String dateToString(Date currentDate) {
-    SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy  HH:mm");
+  public static String dateToString(Date currentDate, String format) {
+    SimpleDateFormat dateFormat = new SimpleDateFormat(format);
     return dateFormat.format(currentDate);
   }
 

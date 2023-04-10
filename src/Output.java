@@ -1,7 +1,11 @@
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class Output implements Finals {
 
@@ -62,14 +66,13 @@ public class Output implements Finals {
       resultStr.append(transaction.getCategory().getTitle()).append(";");
       resultStr.append(transaction.getCurrency().getAcronym()).append(";");
       resultStr.append(transaction.getAmount()).append(";");
-      resultStr.append(Input.dateToString(transaction.getDate()));
+      resultStr.append(Input.dateToString(transaction.getDate(), "dd.MM.yyyy  HH:mm"));
       fileWriter.write(resultStr + "\n");
     }
 
     fileWriter.close();
     System.out.println(GREEN + "... Файл сохранен ..." + RESET);
   }
-
 
   /***
    * Выводит на экран все содержимое списка
@@ -87,23 +90,74 @@ public class Output implements Finals {
     System.out.println("      └" + "─".repeat(101) + "┘");
   }
 
-  public static void printTransactionAll(List<Transaction> transactionList, List<Currency> currencyList, String title) {
+  public static void printTransactionAll(List<Transaction> transactionList, List<Currency> currencyList) throws AWTException, InterruptedException {
+    clearScreen();
     printCurrencyTotal(currencyList);
-    if (title.trim().isEmpty()) { //todo итерация по 10, передаем в метод с границами цикла по списку
-      title = title.trim();
-    } else {
-      title = "[ " + YELLOW + title + RESET + " ]";
-    }
+    String title = String.format("[%s Показано записей: %d    Период: с %s по %s %s]", YELLOW, transactionList.size(),
+        Input.dateToString(transactionList.get(transactionList.size() - 1).getDate(), "dd.MM.yyyy"),
+        Input.dateToString(transactionList.get(0).getDate(), "dd.MM.yyyy"), RESET);
     int left = 101 / 2 - title.length() / 2;
     int right = 101 - left - title.length();
 
     System.out.println("      ┌" + "─".repeat(left + 5) + title + "─".repeat(right + 4) + "┐");
 //    System.out.println("      ┌" + "─".repeat(101) + "┐");
     for (int i = 0; i < transactionList.size(); i++) {
-      System.out.println(transactionList.get(i).printString(i+1));
+      System.out.println(transactionList.get(i).printString(i + 1));
+    }
+    System.out.println("      └" + "─".repeat(101) + "┘");
+  }
+
+  public static void clearScreen() throws AWTException, InterruptedException {
+    Robot robot = new Robot();
+    robot.keyPress(KeyEvent.VK_CONTROL);
+    robot.keyPress(KeyEvent.VK_ALT);
+    robot.keyPress(KeyEvent.VK_SHIFT);
+    robot.keyPress(KeyEvent.VK_Q);
+    robot.keyRelease(KeyEvent.VK_Q);
+    robot.keyRelease(KeyEvent.VK_SHIFT);
+    robot.keyRelease(KeyEvent.VK_ALT);
+    robot.keyRelease(KeyEvent.VK_CONTROL);
+    TimeUnit.MILLISECONDS.sleep(150);
+  }
+
+  public static void printTransactionBy10(BufferedReader br, List<Transaction> transactionList, List<Currency> currencyList) throws AWTException, InterruptedException, IOException {
+    int begin = 0;
+    int end = transactionList.size();
+
+    for (int j = 0; j <= end / 10; j++) {
+//            clearScreen();
+      printCurrencyTotal(currencyList);
+      int current = (j * 10) + 10;
+      if (current > end) {
+        current = end;
+      }
+      String title = String.format("[%s Показано записей: %d из %d    Период: с %s по %s %s]", YELLOW, current, end,
+          Input.dateToString(transactionList.get(transactionList.size() - 1).getDate(), "dd.MM.yyyy"),
+          Input.dateToString(transactionList.get(0).getDate(), "dd.MM.yyyy"), RESET);
+      int left = 101 / 2 - title.length() / 2;
+      int right = 101 - left - title.length();
+      System.out.println("      ┌" + "─".repeat(left + 5) + title + "─".repeat(right + 4) + "┐");
+//            System.out.println("      ┌" + "─".repeat(101) + "┐");
+
+      for (int i = j * 10; i < current; i++) {
+        System.out.println(transactionList.get(i).printString(i + 1));
+      }
+      String answear;
+      if (current != end) {
+        System.out.printf(
+            "      ╘%s Введите любой символ для входа в %sМЕНЮ%s ▼            %sДля просмотра следующей страницы нажмите %sENTER%s ▶ ╛%n",
+            YELLOW, PURPLE, RESET, YELLOW, PURPLE, RESET);
+        System.out.print("➤ ");
+        answear = br.readLine().trim();
+      } else {
+        answear = "menu";
+        System.out.println("      └" + "─".repeat(101) + "┘");
+      }
+      if (!answear.isEmpty()) {
+        Menu.menuMain(br, transactionList, currencyList);
+      }
+
     }
 
-//    printList(transactionList);
-    System.out.println("      └" + "─".repeat(101) + "┘");
   }
 }
