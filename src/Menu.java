@@ -17,7 +17,7 @@ public class Menu implements Finals {
             𝟚. Добавить категорию
             𝟛. Печатать все записи
             𝟜. Запись файла
-            𝟝. 
+            𝟝. считать файл
             𝟞. 
             𝟟. 
             𝟠.
@@ -30,6 +30,8 @@ public class Menu implements Finals {
         case 2 -> Input.addCategory(br);
         case 3 -> Output.printTransactionAll(transactionList, currencyList);
         case 4 -> Output.writeToFile(transactionList, currencyList);
+        case 5 -> Input.readFromFile(transactionList, currencyList);
+
 
 
         case 9 -> isPlaying = false;
@@ -37,7 +39,7 @@ public class Menu implements Finals {
       }
 
 
-      isPlaying = false;
+//      isPlaying = false;
     }
   }
 }

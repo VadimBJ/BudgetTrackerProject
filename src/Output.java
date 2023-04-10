@@ -48,7 +48,7 @@ public class Output implements Finals {
     for (Currency currency : currencyList) {
       resultStr.append(currency.getTitle()).append(";");
       resultStr.append(currency.getAcronym()).append(";");
-      resultStr.append(currency.getTotal()).append(";");
+//      resultStr.append(currency.getTotal()).append(";");
     }
     resultStr.deleteCharAt(resultStr.length() - 1);
     fileWriter.write(resultStr + "\n");
@@ -59,16 +59,16 @@ public class Output implements Finals {
       resultStr = new StringBuilder();
       resultStr.append(transaction.getTitle()).append(";");
       resultStr.append(transaction.getDescription()).append(";");
-      resultStr.append(transaction.getDate()).append(";");
       resultStr.append(transaction.getType()).append(";");
       resultStr.append(transaction.getCategory().getTitle()).append(";");
       resultStr.append(transaction.getCurrency().getAcronym()).append(";");
       resultStr.append(transaction.getAmount()).append(";");
+      resultStr.append(Input.dateToString(transaction.getDate()));
       fileWriter.write(resultStr + "\n");
     }
 
     fileWriter.close();
-    System.out.println(GREEN+ "... Файл сохранен ..." + RESET);
+    System.out.println(GREEN + "... Файл сохранен ..." + RESET);
   }
 
 
@@ -78,7 +78,6 @@ public class Output implements Finals {
    */
   public static void printList(List<?> listToPrint) {
     for (Object obj : listToPrint) {
-//      System.out.println("├"+"─".repeat(101)+"┤");
       System.out.println(obj);
     }
   }

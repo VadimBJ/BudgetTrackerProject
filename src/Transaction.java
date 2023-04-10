@@ -23,12 +23,12 @@ public class Transaction implements Finals {
                      double amount, Date date) {
     this.title = title;
     this.description = description;
-    this.date = date;
     this.type = type;
     this.category = category;
     this.currency = currency;
     currency.setTotal(currency.getTotal() + amount);
     this.amount = amount;
+    this.date = date;
   }
 
   @Override

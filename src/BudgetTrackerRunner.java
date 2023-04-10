@@ -8,32 +8,32 @@ import java.util.List;
 public class BudgetTrackerRunner implements Finals {
   public static void main(String[] args) throws IOException {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
+    List<Currency> currencyList = new ArrayList<>();
+    List<Transaction> transactionList = new ArrayList<>();
+/*
     //инициализация категорий
-    TransactionType.INCOMING.getCategoryList().add(new Category("Зарплата", 0));
-    TransactionType.INCOMING.getCategoryList().add(new Category("Премии/бонусы", 0));
-    TransactionType.INCOMING.getCategoryList().add(new Category("Дивиденды", 0));
-    TransactionType.INCOMING.getCategoryList().add(new Category("Инвестиции", 0));
-    TransactionType.INCOMING.getCategoryList().add(new Category("Аренда недвижимости", 0));
-    TransactionType.INCOMING.getCategoryList().add(new Category("Продажа", 0));
+    TransactionType.INCOMING.getCategoryList().add(new Category("Зарплата"));
+    TransactionType.INCOMING.getCategoryList().add(new Category("Премии/бонусы"));
+    TransactionType.INCOMING.getCategoryList().add(new Category("Дивиденды"));
+    TransactionType.INCOMING.getCategoryList().add(new Category("Инвестиции"));
+    TransactionType.INCOMING.getCategoryList().add(new Category("Аренда недвижимости"));
+    TransactionType.INCOMING.getCategoryList().add(new Category("Продажа"));
 
 
-    TransactionType.OUTGOING.getCategoryList().add(new Category("Жилье и коммунальные услуги", 0));
-    TransactionType.OUTGOING.getCategoryList().add(new Category("Транспорт", 0));
-    TransactionType.OUTGOING.getCategoryList().add(new Category("Продукты", 0));
-    TransactionType.OUTGOING.getCategoryList().add(new Category("Медицинские услуги и лекарства", 0));
-    TransactionType.OUTGOING.getCategoryList().add(new Category("Одежда и обувь", 0));
-    TransactionType.OUTGOING.getCategoryList().add(new Category("Покупка", 0));
+    TransactionType.OUTGOING.getCategoryList().add(new Category("Жилье и коммунальные услуги"));
+    TransactionType.OUTGOING.getCategoryList().add(new Category("Транспорт"));
+    TransactionType.OUTGOING.getCategoryList().add(new Category("Продукты"));
+    TransactionType.OUTGOING.getCategoryList().add(new Category("Медицинские услуги и лекарства"));
+    TransactionType.OUTGOING.getCategoryList().add(new Category("Одежда и обувь"));
+    TransactionType.OUTGOING.getCategoryList().add(new Category("Покупка"));
 
 
     //инициализация валют
-    List<Currency> currencyList = new ArrayList<>();
     currencyList.add(new Currency("US dollar", "USD", 0));
     currencyList.add(new Currency("EURO", "EUR", 0));
     currencyList.add(new Currency("Гривнi", "UAH", 0));
 
     //создание трансакций
-    List<Transaction> transactionList = new ArrayList<>();
     transactionList.add(new Transaction(
         "Оплата комуналки",
         "Комуналка за март",
@@ -63,6 +63,8 @@ public class BudgetTrackerRunner implements Finals {
         currencyList.get(1),
         15000, new Date()));
 
+
+ */
 
 //    System.out.printf(LOGO, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW,
 //        BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, RESET);
