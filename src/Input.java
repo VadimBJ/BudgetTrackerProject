@@ -13,7 +13,6 @@ public class Input implements Finals {
     //считываем категории по типам операции
     for (int j = 0; j < 2; j++) {
       String line = fr.readLine();
-              System.out.println(line);
       String[] value = line.split(";", -1);
       TransactionType type = TransactionType.valueOf(value[0]);
       int num = Integer.parseInt(value[1]);
@@ -24,10 +23,9 @@ public class Input implements Finals {
 
     //считываем валюты
     String line = fr.readLine();
-             System.out.println(line);
     String[] value = line.split(";", -1);
     int num = Integer.parseInt(value[0]);
-    for (int i = 0; i < num*2; i += 2) {
+    for (int i = 0; i < num * 2; i += 2) {
       String title = value[1 + i];
       String acronym = value[2 + i];
 //      double total = Double.parseDouble(value[3 + i]);
@@ -38,7 +36,6 @@ public class Input implements Finals {
     num = Integer.parseInt(fr.readLine());
     for (int i = 0; i < num; i++) {
       line = fr.readLine();
-               System.out.println(line);
       value = line.split(";", -1);
       String title = value[0];
       String description = value[1];
@@ -48,7 +45,9 @@ public class Input implements Finals {
       for (Category category : type.getCategoryList()) {
         if (category.getTitle().equals(value[3])) {
           break;
-        } else {        ++categoryIndex;}
+        } else {
+          ++categoryIndex;
+        }
       }
 
       int currencyIndex = 0;
@@ -56,7 +55,8 @@ public class Input implements Finals {
         if (currency.getAcronym().equals(value[4])) {
           break;
         } else {
-        ++currencyIndex;}
+          ++currencyIndex;
+        }
       }
 
       double amount = Double.parseDouble(value[5]);
@@ -123,8 +123,9 @@ public class Input implements Finals {
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy  HH:mm");
     try {
       currentDate = dateFormat.parse(dateString);
+      System.out.println("data: "+dateString);
     } catch (Exception e) {
-      System.out.println("Ошибка считывания даты");
+      System.out.println("Ошибка считывания даты: "+dateString);
     }
     return currentDate;
   }
