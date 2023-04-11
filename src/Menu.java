@@ -1,11 +1,31 @@
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 
 
 public class Menu implements Finals {
-  private static boolean isPlaying = true;
+
+   private static boolean isPlaying = true;
+
+   public static void menuLogin() throws IOException {
+     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+     System.out.println("""
+        Добро пожаловать в бюджет-трекер!
+        Для начала работы необходимо авторизоваться. Если у вас уже есть учетная запись, введите свой логин и пароль.
+        Если вы новый пользователь, пожалуйста, зарегистрируйтесь. Мы гарантируем безопасность ваших данных!
+        
+          𝟙. Войти под уже существующей учётной записью
+          𝟚. Зарегистрировать нового пользователя
+          """);
+     System.out.print("Введите номер пункта меню: ");
+     int choice = Input.readIntLimited(1, 2);
+     switch (choice) {
+       case 1 -> System.out.println("1");
+       case 2 -> System.out.println("2");
+     }
+   }
 
   public static void menuMain(BufferedReader br, List<Transaction> transactionList,
                               List<Currency> currencyList) throws IOException, AWTException, InterruptedException {
@@ -24,7 +44,6 @@ public class Menu implements Finals {
             𝟞. Добавить новую категорию
             𝟟. Добавить новую валюту
             𝟠. Сохранить все данные в файл
-            𝟡.
             
             𝟘. Выход
           """);
@@ -42,7 +61,7 @@ public class Menu implements Finals {
         //todo Добавить новую валюту
 
         case 8 -> Output.writeToFile(transactionList, currencyList);
-        case 9 -> isPlaying = false;
+        case 9 -> isPlaying = false; //todo меню для выхода с сохранением данных
         default -> System.out.println("default");
       }
     }
