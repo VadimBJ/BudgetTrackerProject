@@ -6,8 +6,8 @@ import java.util.concurrent.TimeUnit;
 
 public class Output implements Finals {
 
-  public static void writeToEncryptFile2(List<Transaction> transactionList,
-                                         List<Currency> currencyList) throws IOException {
+  public static void writeToEncryptFile(List<Transaction> transactionList,
+                                        List<Currency> currencyList) throws IOException, InterruptedException {
     String filename = Input.getUser().getPasswordHash().substring(2, 10);
     File file = new File("res/" + filename + ".txt");
     if (!file.exists()) {
@@ -22,13 +22,15 @@ public class Output implements Finals {
       System.out.print(YELLOW + "... файл найден ..." + RESET);
     }
     FileWriter fileWriter = new FileWriter(file);
+    System.out.println();
+    System.out.print("SAVE TO FILE ");
 
     //выгружаем категории по типам операции
     String type = TransactionType.INCOMING.name();
     int categoryCount = TransactionType.INCOMING.getCategoryList().size();
     StringBuilder resultStr = new StringBuilder();
     resultStr.append(type).append(";").append(categoryCount).append(";");
-    for (Category category : TransactionType.INCOMING.getCategoryList()) {
+    for (Category category : TransactionType.INCOMING.getCategoryList()) { System.out.print("▌");    TimeUnit.MILLISECONDS.sleep(10);
       resultStr.append(category.getTitle()).append(";");
     }
     resultStr.deleteCharAt(resultStr.length() - 1);
@@ -38,7 +40,7 @@ public class Output implements Finals {
     categoryCount = TransactionType.OUTGOING.getCategoryList().size();
     resultStr = new StringBuilder();
     resultStr.append(type).append(";").append(categoryCount).append(";");
-    for (Category category : TransactionType.OUTGOING.getCategoryList()) {
+    for (Category category : TransactionType.OUTGOING.getCategoryList()) { System.out.print("▌");    TimeUnit.MILLISECONDS.sleep(10);
       resultStr.append(category.getTitle()).append(";");
     }
     resultStr.deleteCharAt(resultStr.length() - 1);
@@ -47,7 +49,7 @@ public class Output implements Finals {
     //выгружаем валюты
     resultStr = new StringBuilder();
     resultStr.append(currencyList.size()).append(";");
-    for (Currency currency : currencyList) {
+    for (Currency currency : currencyList) { System.out.print("▌");    TimeUnit.MILLISECONDS.sleep(10);
       resultStr.append(currency.getTitle()).append(";");
       resultStr.append(currency.getAcronym()).append(";");
     }
@@ -56,7 +58,7 @@ public class Output implements Finals {
 
     //выгружаем все записи
     fileWriter.write(Encryption.encryptStrCesar(String.valueOf(transactionList.size()), 17) + "\n");
-    for (Transaction transaction : transactionList) {
+    for (Transaction transaction : transactionList) { System.out.print("▌");    TimeUnit.MILLISECONDS.sleep(5);
       resultStr = new StringBuilder();
       resultStr.append(transaction.getTitle()).append(";");
       resultStr.append(transaction.getDescription()).append(";");
@@ -69,73 +71,7 @@ public class Output implements Finals {
     }
 
     fileWriter.close();
-    System.out.println(GREEN + "... Файл сохранен ..." + RESET);
-    System.exit(0);
-  }
-
-  public static void writeToEncryptFile(List<Transaction> transactionList,
-                                        List<Currency> currencyList) throws IOException {
-    String filename = Input.getUser().getPasswordHash().substring(2, 10);
-    File file = new File("res/" + filename + ".txt");
-    if (!file.exists()) {
-      System.out.print(RED + "... файл не найден ..." + RESET);
-      if (file.createNewFile()) {
-        System.out.print(YELLOW + "... файл создан ..." + RESET);
-      } else {
-        System.out.print(RED + "... файл не создан ..." + RESET);
-        return;
-      }
-    } else {
-      System.out.print(YELLOW + "... файл найден ..." + RESET);
-    }
-    FileWriter fileWriter = new FileWriter(file);
-
-    //выгружаем категории по типам операции
-    String type = TransactionType.INCOMING.name();
-    int categoryCount = TransactionType.INCOMING.getCategoryList().size();
-    StringBuilder resultStr = new StringBuilder();
-    resultStr.append(type).append(";").append(categoryCount).append(";");
-    for (Category category : TransactionType.INCOMING.getCategoryList()) {
-      resultStr.append(category.getTitle()).append(";");
-    }
-    resultStr.deleteCharAt(resultStr.length() - 1);
-    fileWriter.write(Encryption.encryptXOR(resultStr.toString(), Input.user.getPasswordHash()) + "\n");
-
-    type = TransactionType.OUTGOING.name();
-    categoryCount = TransactionType.OUTGOING.getCategoryList().size();
-    resultStr = new StringBuilder();
-    resultStr.append(type).append(";").append(categoryCount).append(";");
-    for (Category category : TransactionType.OUTGOING.getCategoryList()) {
-      resultStr.append(category.getTitle()).append(";");
-    }
-    resultStr.deleteCharAt(resultStr.length() - 1);
-    fileWriter.write(Encryption.encryptXOR(resultStr.toString(), Input.user.getPasswordHash()) + "\n");
-
-    //выгружаем валюты
-    resultStr = new StringBuilder();
-    resultStr.append(currencyList.size()).append(";");
-    for (Currency currency : currencyList) {
-      resultStr.append(currency.getTitle()).append(";");
-      resultStr.append(currency.getAcronym()).append(";");
-    }
-    resultStr.deleteCharAt(resultStr.length() - 1);
-    fileWriter.write(Encryption.encryptXOR(resultStr.toString(), Input.user.getPasswordHash()) + "\n");
-
-    //выгружаем все записи
-    fileWriter.write(transactionList.size() + "\n");
-    for (Transaction transaction : transactionList) {
-      resultStr = new StringBuilder();
-      resultStr.append(transaction.getTitle()).append(";");
-      resultStr.append(transaction.getDescription()).append(";");
-      resultStr.append(transaction.getType()).append(";");
-      resultStr.append(transaction.getCategory().getTitle()).append(";");
-      resultStr.append(transaction.getCurrency().getAcronym()).append(";");
-      resultStr.append(transaction.getAmount()).append(";");
-      resultStr.append(Input.dateToString(transaction.getDate(), "dd.MM.yyyy  HH:mm"));
-      fileWriter.write(Encryption.encryptXOR(resultStr.toString(), Input.user.getPasswordHash()) + "\n");
-    }
-
-    fileWriter.close();
+    System.out.println();
     System.out.println(GREEN + "... Файл сохранен ..." + RESET);
   }
 

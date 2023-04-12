@@ -3,6 +3,7 @@ import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class Input implements Finals {
   public static User user;
@@ -11,7 +12,7 @@ public class Input implements Finals {
     return user;
   }
 
-  public static void initializeData(List<Transaction> transactionList, List<Currency> currencyList) {
+  public static void initializeData(List<Currency> currencyList) {
     //инициализация категорий
     TransactionType.INCOMING.getCategoryList().add(new Category("Доходы"));
     TransactionType.OUTGOING.getCategoryList().add(new Category("Расходы"));
@@ -28,49 +29,19 @@ public class Input implements Finals {
     System.out.print("Введите Ваш пароль: ");
     String password = br.readLine();
     user = new User(login, password);
-
-
-    initializeData(transactionList, currencyList);
   }
 
-  public static void testEncrypt() throws IOException {
-    String filename = user.getPasswordHash().substring(2, 10);
-    File fileRead = new File("res/" + filename + ".txt");
-    BufferedReader fileReader = new BufferedReader(new FileReader(fileRead));
-
-    File fileWrite = new File("res/" + filename + "s.txt");
-    if (!fileWrite.exists()) {
-      System.out.print(RED + "... файл не найден ..." + RESET);
-      if (fileWrite.createNewFile()) {
-        System.out.print(YELLOW + "... файл создан ..." + RESET);
-      } else {
-        System.out.print(RED + "... файл не создан ..." + RESET);
-        return;
-      }
-    } else {
-      System.out.print(YELLOW + "... файл найден ..." + RESET);
-    }
-    FileWriter fileWriter = new FileWriter(fileWrite);
-
-    for (String line = fileReader.readLine(); line != null; line = fileReader.readLine()) {
-      fileWriter.write(Encryption.encryptXOR(line, user.getPasswordHash()) + "\n");
-    }
-    fileWriter.close();
-
-
-  }
 
   public static void readFromEncryptFile(List<Transaction> transactionList,
-                                         List<Currency> currencyList) throws IOException {
+                                         List<Currency> currencyList) throws IOException, InterruptedException {
+    System.out.print("LOADING FILE ");
     String filename = user.getPasswordHash().substring(2, 10);
     File file = new File("res/" + filename + ".txt");
     BufferedReader fr = new BufferedReader(new FileReader(file));
 
     //считываем категории по типам операции
-    for (int j = 0; j < 2; j++) {
+    for (int j = 0; j < 2; j++) {  System.out.print("▌");    TimeUnit.MILLISECONDS.sleep(10);
       String line = Encryption.decryptStrCesar(fr.readLine(), 17);
-      System.out.println(line);
-
       String[] value = line.split(";", -1);
       TransactionType type = TransactionType.valueOf(value[0]);
       int num = Integer.parseInt(value[1]);
@@ -83,7 +54,7 @@ public class Input implements Finals {
     String line = Encryption.decryptStrCesar(fr.readLine(), 17);
     String[] value = line.split(";", -1);
     int num = Integer.parseInt(value[0]);
-    for (int i = 0; i < num * 2; i += 2) {
+    for (int i = 0; i < num * 2; i += 2) {  System.out.print("▌");TimeUnit.MILLISECONDS.sleep(10);
       String title = value[1 + i];
       String acronym = value[2 + i];
       currencyList.add(new Currency(title, acronym, 0));
@@ -91,7 +62,7 @@ public class Input implements Finals {
 
     //считываем все записи
     num = Integer.parseInt(Encryption.decryptStrCesar(fr.readLine(), 17));
-    for (int i = 0; i < num; i++) {
+    for (int i = 0; i < num; i++) {  System.out.print("▌");TimeUnit.MILLISECONDS.sleep(5);
       line = Encryption.decryptStrCesar(fr.readLine(), 17);
       value = line.split(";", -1);
       String title = value[0];
@@ -146,7 +117,6 @@ public class Input implements Finals {
     for (int i = 0; i < num * 2; i += 2) {
       String title = value[1 + i];
       String acronym = value[2 + i];
-//      double total = Double.parseDouble(value[3 + i]);
       currencyList.add(new Currency(title, acronym, 0));
     }
 

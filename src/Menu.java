@@ -1,15 +1,15 @@
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.List;
 
 
 public class Menu implements Finals {
 
   public static void menuLogin(List<Transaction> transactionList,
-                               List<Currency> currencyList) throws IOException {
+                               List<Currency> currencyList) throws IOException, InterruptedException {
     System.out.println("""
+           
            Добро пожаловать в бюджет-трекер!
         Для начала работы Вам необходимо авторизоваться.
         Если у вас уже есть учетная запись, введите свой логин и пароль.
@@ -21,8 +21,14 @@ public class Menu implements Finals {
     System.out.print("Введите номер пункта меню: ");
     int choice = Input.readIntLimited(1, 2);
     switch (choice) {
-      case 1 -> Input.readFromEncryptFile(transactionList, currencyList);
-      case 2 -> Input.userRead(transactionList, currencyList);
+      case 1 -> {
+        Input.userRead(transactionList, currencyList);
+        Input.readFromEncryptFile(transactionList, currencyList);
+      }
+      case 2 -> {
+        Input.userRead(transactionList, currencyList);
+        Input.initializeData(currencyList);
+      }
     }
   }
 
@@ -61,8 +67,8 @@ public class Menu implements Finals {
 
         //todo Добавить новую валюту
 
-        case 8 -> Output.writeToEncryptFile2(transactionList, currencyList);
-        case 9 -> Input.testEncrypt();
+        case 8 -> Output.writeToEncryptFile(transactionList, currencyList);
+        case 9 -> System.out.println("9");
         case 0 -> System.exit(0); //todo меню для выхода с сохранением данных
         default -> System.out.println("default");
       }

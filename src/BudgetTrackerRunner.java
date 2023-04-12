@@ -26,10 +26,6 @@ public class BudgetTrackerRunner implements Finals {
 
 
 
-//
-//    String enter = br.readLine();
-//    System.out.println(enter);
-
     Menu.menuMain(br, transactionList, currencyList);
 
 
