@@ -46,7 +46,6 @@ public class Transaction implements Finals, Comparable<Transaction> {
             1. │ %-15s   %-80s\u2009\u2009│%n""",
         type.getTitle(), BLUE, category.getTitle(), RESET, Input.dateToString(date,"dd.MM.yyyy  HH:mm"), summa, shortDescription)
         + "    ├" + "─".repeat(101) + "┤";
-
   }
 
   public String printString(int i) {
@@ -59,12 +58,12 @@ public class Transaction implements Finals, Comparable<Transaction> {
     } else shortDescription = title;
     String num = "000" + i;
     num = num.substring(num.length()-3);
+
     return String.format("""
                   │    %-12s       |   %s%-60s%s  %16s │
             %5s │ %-15s   %-80s\u2009\u2009│%n""",
         type.getTitle(), BLUE, category.getTitle(), RESET, Input.dateToString(date,"dd.MM.yyyy  HH:mm"),num, summa, shortDescription)
         + "      ├" + "─".repeat(101) + "┤";
-
   }
 
   public String getTitle() {

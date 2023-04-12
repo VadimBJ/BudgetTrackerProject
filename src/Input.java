@@ -5,6 +5,123 @@ import java.util.Date;
 import java.util.List;
 
 public class Input implements Finals {
+  public static User user;
+
+  public static User getUser() {
+    return user;
+  }
+
+  public static void initializeData(List<Transaction> transactionList, List<Currency> currencyList) {
+    //инициализация категорий
+    TransactionType.INCOMING.getCategoryList().add(new Category("Доходы"));
+    TransactionType.OUTGOING.getCategoryList().add(new Category("Расходы"));
+
+    //инициализация валют
+    currencyList.add(new Currency("US dollar", "USD", 0));
+    currencyList.add(new Currency("EURO", "EUR", 0));
+  }
+
+  public static void userRead(List<Transaction> transactionList, List<Currency> currencyList) throws IOException {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    System.out.print("Введите Ваш логин или e-mail: ");
+    String login = br.readLine();
+    System.out.print("Введите Ваш пароль: ");
+    String password = br.readLine();
+    user = new User(login, password);
+
+
+    initializeData(transactionList, currencyList);
+  }
+
+  public static void testEncrypt() throws IOException {
+    String filename = user.getPasswordHash().substring(2, 10);
+    File fileRead = new File("res/" + filename + ".txt");
+    BufferedReader fileReader = new BufferedReader(new FileReader(fileRead));
+
+    File fileWrite = new File("res/" + filename + "s.txt");
+    if (!fileWrite.exists()) {
+      System.out.print(RED + "... файл не найден ..." + RESET);
+      if (fileWrite.createNewFile()) {
+        System.out.print(YELLOW + "... файл создан ..." + RESET);
+      } else {
+        System.out.print(RED + "... файл не создан ..." + RESET);
+        return;
+      }
+    } else {
+      System.out.print(YELLOW + "... файл найден ..." + RESET);
+    }
+    FileWriter fileWriter = new FileWriter(fileWrite);
+
+    for (String line = fileReader.readLine(); line != null; line = fileReader.readLine()) {
+      fileWriter.write(Encryption.encryptXOR(line, user.getPasswordHash()) + "\n");
+    }
+    fileWriter.close();
+
+
+  }
+
+  public static void readFromEncryptFile(List<Transaction> transactionList,
+                                         List<Currency> currencyList) throws IOException {
+    String filename = user.getPasswordHash().substring(2, 10);
+    File file = new File("res/" + filename + ".txt");
+    BufferedReader fr = new BufferedReader(new FileReader(file));
+
+    //считываем категории по типам операции
+    for (int j = 0; j < 2; j++) {
+      String line = Encryption.decryptStrCesar(fr.readLine(), 17);
+      System.out.println(line);
+
+      String[] value = line.split(";", -1);
+      TransactionType type = TransactionType.valueOf(value[0]);
+      int num = Integer.parseInt(value[1]);
+      for (int i = 2; i < num + 2; i++) {
+        type.getCategoryList().add(new Category(value[i]));
+      }
+    }
+
+    //считываем валюты
+    String line = Encryption.decryptStrCesar(fr.readLine(), 17);
+    String[] value = line.split(";", -1);
+    int num = Integer.parseInt(value[0]);
+    for (int i = 0; i < num * 2; i += 2) {
+      String title = value[1 + i];
+      String acronym = value[2 + i];
+      currencyList.add(new Currency(title, acronym, 0));
+    }
+
+    //считываем все записи
+    num = Integer.parseInt(Encryption.decryptStrCesar(fr.readLine(), 17));
+    for (int i = 0; i < num; i++) {
+      line = Encryption.decryptStrCesar(fr.readLine(), 17);
+      value = line.split(";", -1);
+      String title = value[0];
+      String description = value[1];
+      TransactionType type = TransactionType.valueOf(value[2]);
+
+      int categoryIndex = 0;
+      for (Category category : type.getCategoryList()) {
+        if (category.getTitle().equals(value[3])) {
+          break;
+        } else {
+          ++categoryIndex;
+        }
+      }
+
+      int currencyIndex = 0;
+      for (Currency currency : currencyList) {
+        if (currency.getAcronym().equals(value[4])) {
+          break;
+        } else {
+          ++currencyIndex;
+        }
+      }
+
+      double amount = Double.parseDouble(value[5]);
+      Date date = dateFromString(value[6]);
+      transactionList.add(new Transaction(title, description, type, type.getCategoryList().get(categoryIndex),
+          currencyList.get(currencyIndex), amount, date));
+    }
+  }
 
   public static void readFromFile(List<Transaction> transactionList,
                                   List<Currency> currencyList) throws IOException {
@@ -97,7 +214,7 @@ public class Input implements Finals {
     TransactionType transactionType = takeType();
     Category category = takeCategory(transactionType);
     Currency currency = takeCurrency(currencyList);
-    System.out.print("Введите сумму операции: ");
+    System.out.print(BLUE + "Введите сумму операции: " + RESET);
     double amount = Math.abs(readDoubleLimited(-Double.MAX_VALUE, Double.MAX_VALUE));
     amount = transactionType == TransactionType.INCOMING ? amount : -amount;
     Date date = new Date();

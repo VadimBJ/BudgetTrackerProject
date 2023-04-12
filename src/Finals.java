@@ -1,4 +1,5 @@
 public interface Finals {
+  User USER = new User("a","b");
   String RESET = "\u001B[0m";
   String RED = "\u001B[31m";
   String GREEN = "\u001B[32m";
