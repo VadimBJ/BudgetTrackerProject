@@ -2,9 +2,30 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.io.*;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class Output implements Finals {
+
+  public static void saveLoginFile(Map<String, String> userData) throws IOException {
+    File file = new File("res/dd2495l.txt");
+    if (!file.exists()) {
+      System.out.print(RED + "... файл не найден ..." + RESET);
+      if (file.createNewFile()) {
+        System.out.print(YELLOW + "... файл создан ..." + RESET);
+      } else {
+        System.out.print(RED + "... файл не создан ..." + RESET);
+        return;
+      }
+    }
+    FileWriter fileWriter = new FileWriter(file);
+    for (Map.Entry<String, String> loginPass : userData.entrySet()) {
+//      String line = loginPass.getKey()+";"+loginPass.getValue();
+      String line = Encryption.encryptStrCesar(loginPass.getKey() + ";" + loginPass.getValue(), 11);
+      fileWriter.write(line + "\n");
+    }
+    fileWriter.close();
+  }
 
   public static void writeToEncryptFile(List<Transaction> transactionList,
                                         List<Currency> currencyList) throws IOException, InterruptedException {
@@ -23,14 +44,16 @@ public class Output implements Finals {
     }
     FileWriter fileWriter = new FileWriter(file);
     System.out.println();
-    System.out.print("SAVE TO FILE ");
+    System.out.print("FILE ENCRYPTION ");
 
     //выгружаем категории по типам операции
     String type = TransactionType.INCOMING.name();
     int categoryCount = TransactionType.INCOMING.getCategoryList().size();
     StringBuilder resultStr = new StringBuilder();
     resultStr.append(type).append(";").append(categoryCount).append(";");
-    for (Category category : TransactionType.INCOMING.getCategoryList()) { System.out.print("▌");    TimeUnit.MILLISECONDS.sleep(10);
+    for (Category category : TransactionType.INCOMING.getCategoryList()) {
+      System.out.print("▌");
+      TimeUnit.MILLISECONDS.sleep(10);
       resultStr.append(category.getTitle()).append(";");
     }
     resultStr.deleteCharAt(resultStr.length() - 1);
@@ -40,7 +63,9 @@ public class Output implements Finals {
     categoryCount = TransactionType.OUTGOING.getCategoryList().size();
     resultStr = new StringBuilder();
     resultStr.append(type).append(";").append(categoryCount).append(";");
-    for (Category category : TransactionType.OUTGOING.getCategoryList()) { System.out.print("▌");    TimeUnit.MILLISECONDS.sleep(10);
+    for (Category category : TransactionType.OUTGOING.getCategoryList()) {
+      System.out.print("▌");
+      TimeUnit.MILLISECONDS.sleep(10);
       resultStr.append(category.getTitle()).append(";");
     }
     resultStr.deleteCharAt(resultStr.length() - 1);
@@ -49,7 +74,9 @@ public class Output implements Finals {
     //выгружаем валюты
     resultStr = new StringBuilder();
     resultStr.append(currencyList.size()).append(";");
-    for (Currency currency : currencyList) { System.out.print("▌");    TimeUnit.MILLISECONDS.sleep(10);
+    for (Currency currency : currencyList) {
+      System.out.print("▌");
+      TimeUnit.MILLISECONDS.sleep(10);
       resultStr.append(currency.getTitle()).append(";");
       resultStr.append(currency.getAcronym()).append(";");
     }
@@ -58,7 +85,9 @@ public class Output implements Finals {
 
     //выгружаем все записи
     fileWriter.write(Encryption.encryptStrCesar(String.valueOf(transactionList.size()), 17) + "\n");
-    for (Transaction transaction : transactionList) { System.out.print("▌");    TimeUnit.MILLISECONDS.sleep(5);
+    for (Transaction transaction : transactionList) {
+      System.out.print("▌");
+      TimeUnit.MILLISECONDS.sleep(5);
       resultStr = new StringBuilder();
       resultStr.append(transaction.getTitle()).append(";");
       resultStr.append(transaction.getDescription()).append(";");
@@ -161,26 +190,33 @@ public class Output implements Finals {
                                          List<Currency> currencyList) throws AWTException, InterruptedException, IOException {
     clearScreen();
     if (currencyList.size() == 0 || transactionList.size() == 0) {
-  System.out.println(RED + "⛔ Перед просмотром Вам необходимо создать хотя бы одну запись!" + RESET);
+      System.out.println(RED + "⛔ Перед просмотром Вам необходимо создать хотя бы одну запись!" + RESET);
       System.out.println();
-      System.out.print("Нажмите ENTER для возврата в главное меню: ");
+      System.out.println(" === Нажмите ENTER для возврата в главное меню === ");
       String wait = br.readLine();
       return;
     }
 
-      printCurrencyTotal(currencyList);
-      String title = String.format("[%s Показано записей: %d    Период: с %s по %s %s]", YELLOW, transactionList.size(),
-          Input.dateToString(transactionList.get(transactionList.size() - 1).getDate(), "dd.MM.yyyy"),
-          Input.dateToString(transactionList.get(0).getDate(), "dd.MM.yyyy"), RESET);
-      int left = 101 / 2 - title.length() / 2;
-      int right = 101 - left - title.length();
+    printCurrencyTotal(currencyList);
+    String title = String.format("[%s Показано записей: %d    Период: с %s по %s %s]", YELLOW, transactionList.size(),
+        Input.dateToString(transactionList.get(0).getDate(), "dd.MM.yyyy"),
+        Input.dateToString(transactionList.get(transactionList.size() - 1).getDate(), "dd.MM.yyyy"), RESET);
+    int left = 101 / 2 - title.length() / 2;
+    int right = 101 - left - title.length();
 
-      System.out.println("      ╭" + "─".repeat(left + 5) + title + "─".repeat(right + 4) + "╮");
-      for (int i = 0; i < transactionList.size(); i++) {
-        System.out.println(transactionList.get(i).printString(i + 1));
-      }
-      System.out.println("      ╰" + "─".repeat(101) + "╯");
-      Menu.menuAfterTransactionListEnds(br, transactionList, currencyList);
+    System.out.println("      ╭" + "─".repeat(left + 5) + title + "─".repeat(right + 4) + "╮");
+    for (int i = transactionList.size() - 1; i >= 0; --i) {
+      int ind = transactionList.size() - i - 1;
+      System.out.println(transactionList.get(i).printString(ind + 1));
+    }
+    System.out.println("      ╰" + "─".repeat(101) + "╯");
+
+
+//      for (int i = 0; i < transactionList.size(); i++) {
+//        System.out.println(transactionList.get(i).printString(i + 1));
+//      }
+//      System.out.println("      ╰" + "─".repeat(101) + "╯");
+    Menu.menuAfterTransactionListEnds(br, transactionList, currencyList);
   }
 
   public static void clearScreen() throws AWTException, InterruptedException {
@@ -247,7 +283,8 @@ public class Output implements Finals {
   public static void showTransactionById(BufferedReader br, List<Transaction> transactionList,
                                          List<Currency> currencyList, int index) throws IOException, InterruptedException, AWTException {
     clearScreen();
-    Transaction transaction = transactionList.get(index - 1);
+    int ind = transactionList.size() - index;
+    Transaction transaction = transactionList.get(ind);
     String title = transaction.getTitle();
     String description = transaction.getDescription();
     String date = Input.dateToString(transaction.getDate(), "dd.MM.yyyy  HH:mm");
@@ -282,6 +319,6 @@ public class Output implements Finals {
     System.out.println("│    " + date);
     System.out.println("╰" + "─".repeat(45) + "┈┈┈┈┈┄┄┄┄┄┄");
 
-    Menu.menuAnderTransactionView(br, transactionList, currencyList, index - 1);
+    Menu.menuAnderTransactionView(br, transactionList, currencyList, ind);
   }
 }

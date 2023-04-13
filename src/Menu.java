@@ -2,34 +2,36 @@ import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 
 public class Menu implements Finals {
 
   public static void menuLogin(List<Transaction> transactionList,
-                               List<Currency> currencyList) throws IOException, InterruptedException {
-    System.out.println("""
-           
-           Добро пожаловать в бюджет-трекер!
-        Для начала работы Вам необходимо авторизоваться.
-        Если у вас уже есть учетная запись, введите свой логин и пароль.
-        Если Вы новый пользователь, пожалуйста, зарегистрируйтесь.
-        Мы гарантируем безопасность ваших данных!
-               
-          𝟙. Войти под уже существующей учётной записью
-          𝟚. Зарегистрировать нового пользователя""");
-    System.out.print("Введите номер пункта меню: ");
-    int choice = Input.readIntLimited(1, 2);
-    switch (choice) {
-      case 1 -> {
-        Input.userRead(transactionList, currencyList);
-        Input.readFromEncryptFile(transactionList, currencyList);
+                               List<Currency> currencyList, Map<String, String> userData) throws IOException, InterruptedException {
+    boolean isLogin = false;
+    do {
+      System.out.print("""
+            
+            𝟙. Войти под уже существующей учётной записью
+            𝟚. Зарегистрировать нового пользователя
+          Введите номер пункта меню:\u202F""");
+      int choice = Input.readIntLimited(1, 2);
+      switch (choice) {
+        case 1 -> {
+          isLogin = Input.userLoginRead(userData);
+          if (isLogin) {
+            Input.readFromEncryptFile(transactionList, currencyList);
+          }
+        }
+        case 2 -> {
+          isLogin = Input.userNewRead(userData);
+          if (isLogin) {
+            Input.initializeData(currencyList);
+          }
+        }
       }
-      case 2 -> {
-        Input.userRead(transactionList, currencyList);
-        Input.initializeData(currencyList);
-      }
-    }
+    } while (!isLogin);
   }
 
   public static void menuMain(BufferedReader br, List<Transaction> transactionList,
@@ -50,12 +52,10 @@ public class Menu implements Finals {
             𝟟. Добавить новую валюту
             𝟠. Сохранить все данные в файл
             
-            9 - тест
-            
             𝟘. Выход
           """);
       System.out.print("Введите номер пункта меню: ");
-      int choice = Input.readIntLimited(0, 9);
+      int choice = Input.readIntLimited(0, 8);
       switch (choice) {
         case 1 -> Input.addTransaction(br, transactionList, currencyList);
         case 2 -> Output.printTransactionAll(br, transactionList, currencyList);
@@ -68,7 +68,6 @@ public class Menu implements Finals {
         //todo Добавить новую валюту
 
         case 8 -> Output.writeToEncryptFile(transactionList, currencyList);
-        case 9 -> System.out.println("9");
         case 0 -> System.exit(0); //todo меню для выхода с сохранением данных
         default -> System.out.println("default");
       }
@@ -92,7 +91,7 @@ public class Menu implements Finals {
       }
       case 2 -> {
         System.out.print(BLUE + "Введите Id нужной записи: " + RESET);
-        transactionList.remove(Input.readIntLimited(1, transactionList.size()) - 1);
+        transactionList.remove(transactionList.size()-Input.readIntLimited(1, transactionList.size()) - 1);
       }
       case 3 -> System.out.println(" ");
       case 4 -> Menu.menuMain(br, transactionList, currencyList);
@@ -115,7 +114,7 @@ public class Menu implements Finals {
       }
       case 2 -> {
         System.out.print(BLUE + "Введите Id нужной записи: " + RESET);
-        transactionList.remove(Input.readIntLimited(1, transactionList.size()) - 1);
+        transactionList.remove(transactionList.size()-Input.readIntLimited(1, transactionList.size()));
       }
       case 3 -> Menu.menuMain(br, transactionList, currencyList);
     }
@@ -127,11 +126,11 @@ public class Menu implements Finals {
         Доступные действия:
           𝟙. Удалить эту запись
           𝟚. Продолжить просмотр станиц
-          𝟛. Вернуться в главное меню""");
+          𝟛. Вернуться в главное меню"""); //todo редактировать запись
     System.out.print("Введите номер пункта меню: ");
     int choice = Input.readIntLimited(1, 3);
     switch (choice) {
-      case 1 -> transactionList.remove(index);
+      case 1 -> transactionList.remove(index);//todo учитывать в общей сумме
       case 2 -> System.out.println(" ");
       case 3 -> Menu.menuMain(br, transactionList, currencyList);
       default -> System.out.println(" 2");

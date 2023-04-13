@@ -96,6 +96,7 @@ public class Transaction implements Finals, Comparable<Transaction> {
 
   @Override
   public int compareTo(Transaction obj) {
-    return obj.getDate().compareTo(this.date);
+//    return obj.getDate().compareTo(this.date);
+    return this.date.compareTo(obj.getDate());
   }
 }

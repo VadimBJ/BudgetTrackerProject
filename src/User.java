@@ -4,16 +4,14 @@ import java.security.NoSuchAlgorithmException;
 
 public class User {
   private String login;
-  private String password;
   private String passwordHash;
 
   public User(String login, String password) {
     this.login = login;
-    this.password = password;
     this.passwordHash = passwordHash(password+"ax"+login);
   }
 
-  private static String passwordHash(String password) {
+  public static String passwordHash(String password) {
     try {
       MessageDigest md = MessageDigest.getInstance("SHA-256");
       byte[] hashedBytes = md.digest(password.getBytes(StandardCharsets.UTF_8));
@@ -33,10 +31,6 @@ public class User {
 
   public String getLogin() {
     return login;
-  }
-
-  public String getPassword() {
-    return password;
   }
 
   public String getPasswordHash() {
