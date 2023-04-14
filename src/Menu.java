@@ -69,37 +69,37 @@ public class Menu implements Finals {
 
         case 8 -> Output.writeToEncryptFile(transactionList, currencyList);
         case 0 -> System.exit(0); //todo меню для выхода с сохранением данных
-        default -> System.out.println("default");
       }
     }
   }
 
   public static void menuAnderTransactionList(BufferedReader br, List<Transaction> transactionList,
-                                              List<Currency> currencyList) throws IOException, InterruptedException, AWTException {
+                                              List<Currency> currencyList, boolean isList10) throws IOException, InterruptedException, AWTException {
     System.out.println("""
         Доступные действия:
           𝟙. Просмотреть запись по Id
           𝟚. Удалить запись по Id
-          𝟛. Продолжить просмотр станиц
-          𝟜. Вернуться в главное меню""");
+          𝟛. Вернуться в главное меню
+          𝟜. Продолжить просмотр станиц""");
     System.out.print("Введите номер пункта меню: ");
     int choice = Input.readIntLimited(1, 4);
     switch (choice) {
       case 1 -> {
         System.out.print(BLUE + "Введите Id нужной записи: " + RESET);
-        Output.showTransactionById(br, transactionList, currencyList, Input.readIntLimited(1, transactionList.size()));
+        Output.showTransactionById(br, transactionList, currencyList, Input.readIntLimited(1, transactionList.size()), isList10);
       }
       case 2 -> {
         System.out.print(BLUE + "Введите Id нужной записи: " + RESET);
-        transactionList.remove(transactionList.size()-Input.readIntLimited(1, transactionList.size()) - 1);
+        Input.deleteTransaction(transactionList, transactionList.size() - Input.readIntLimited(1, transactionList.size()));
       }
-      case 3 -> System.out.println(" ");
-      case 4 -> Menu.menuMain(br, transactionList, currencyList);
+      case 3 -> Menu.menuMain(br, transactionList, currencyList);
+      case 4 -> System.out.println(" ");
+
     }
   }
 
   public static void menuAfterTransactionListEnds(BufferedReader br, List<Transaction> transactionList,
-                                                  List<Currency> currencyList) throws IOException, InterruptedException, AWTException {
+                                                  List<Currency> currencyList, boolean isList10) throws IOException, InterruptedException, AWTException {
     System.out.println("""
         Доступные действия:
           𝟙. Просмотреть запись по Id
@@ -110,30 +110,37 @@ public class Menu implements Finals {
     switch (choice) {
       case 1 -> {
         System.out.print(BLUE + "Введите Id нужной записи: " + RESET);
-        Output.showTransactionById(br, transactionList, currencyList, Input.readIntLimited(1, transactionList.size()));
+        Output.showTransactionById(br, transactionList, currencyList, Input.readIntLimited(1, transactionList.size()), isList10);
       }
       case 2 -> {
         System.out.print(BLUE + "Введите Id нужной записи: " + RESET);
-        transactionList.remove(transactionList.size()-Input.readIntLimited(1, transactionList.size()));
+        Input.deleteTransaction(transactionList, transactionList.size() - Input.readIntLimited(1, transactionList.size()));
       }
       case 3 -> Menu.menuMain(br, transactionList, currencyList);
     }
   }
 
   public static void menuAnderTransactionView(BufferedReader br, List<Transaction> transactionList,
-                                              List<Currency> currencyList, int index) throws IOException, InterruptedException, AWTException {
+                                              List<Currency> currencyList, int index, boolean isList10) throws IOException, InterruptedException, AWTException {
     System.out.println("""
         Доступные действия:
           𝟙. Удалить эту запись
-          𝟚. Продолжить просмотр станиц
-          𝟛. Вернуться в главное меню"""); //todo редактировать запись
-    System.out.print("Введите номер пункта меню: ");
-    int choice = Input.readIntLimited(1, 3);
+          𝟚. Редактировать эту запись
+          𝟛. Вернуться в главное меню""");
+    int choice;
+    if (isList10) {
+      System.out.println("  𝟜. Продолжить просмотр станиц");
+      System.out.print("Введите номер пункта меню: ");
+      choice = Input.readIntLimited(1, 4);
+    } else {
+      System.out.print("Введите номер пункта меню: ");
+      choice = Input.readIntLimited(1, 3);
+    }
     switch (choice) {
-      case 1 -> transactionList.remove(index);//todo учитывать в общей сумме
-      case 2 -> System.out.println(" ");
+      case 1 -> Input.deleteTransaction(transactionList, index); //todo учитывать в общей сумме
+      case 2 -> System.out.println(" ");//todo 2. редактировать запись
       case 3 -> Menu.menuMain(br, transactionList, currencyList);
-      default -> System.out.println(" 2");
+      case 4 -> System.out.print(" ");
     }
   }
 

@@ -24,11 +24,13 @@ public class BudgetTrackerRunner implements Finals {
 
     Input.readLoginFile(userData);
 
+//    userData.put("Vadim",User.makeHash("123456","Vadim"));
+//    userData.put("aaa",User.makeHash("123","aaa"));
+
+
     Menu.menuLogin(transactionList, currencyList, userData);
 
     Menu.menuMain(br, transactionList, currencyList);
 
   }
-
-
 }

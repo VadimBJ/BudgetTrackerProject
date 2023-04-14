@@ -13,6 +13,13 @@ public class Input implements Finals {
     return user;
   }
 
+  public static void deleteTransaction(List<Transaction> transactionList, int index) {
+    double amount = transactionList.get(index).getAmount();
+    double total = transactionList.get(index).getCurrency().getTotal();
+    transactionList.get(index).getCurrency().setTotal(total - amount);
+    transactionList.remove(index);
+  }
+
   public static void initializeData(List<Currency> currencyList) {
     //инициализация категорий
     TransactionType.INCOMING.getCategoryList().add(new Category("Доходы"));
@@ -25,8 +32,14 @@ public class Input implements Finals {
 
   public static boolean userLoginRead(Map<String, String> userData) throws IOException {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    System.out.print("Введите Ваш логин или e-mail: ");
-    String login = br.readLine();
+    String login;
+    do {
+      System.out.print("Введите Ваш логин или e-mail: ");
+      login = br.readLine();
+      if (login.trim().isEmpty()) {
+        System.out.println(RED + "Это поле не может быть пустым!" + RESET);
+      }
+    } while (login.trim().isEmpty());
     if (!userData.containsKey(login)) {
       System.out.println(RED + "Такой пользователь не найден!" + RESET);
       System.out.println();
@@ -36,8 +49,13 @@ public class Input implements Finals {
     String expectPasswordHash = userData.get(login);
     System.out.print("Введите Ваш пароль: ");
     String password = br.readLine();
-    if (!expectPasswordHash.equals(User.passwordHash(password))) {
+    if (!expectPasswordHash.equals(User.makeHash(password,login))) {
       System.out.println(RED + "Введен неправильный пароль!" + RESET);
+
+      System.out.println("p:  "+password);
+      System.out.println("ph: "+expectPasswordHash);
+      System.out.println("ph: "+User.makeHash(password,login));
+
       System.out.println();
       System.out.println("Возможно Вам нужен пункт регистрации нового пользователя");
       return false;
@@ -48,8 +66,14 @@ public class Input implements Finals {
 
   public static boolean userNewRead(Map<String, String> userData) throws IOException { //todo
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    System.out.print("Введите Ваш логин или e-mail: ");
-    String login = br.readLine();
+    String login;
+    do {
+      System.out.print("Введите Ваш логин или e-mail: ");
+      login = br.readLine();
+      if (login.trim().isEmpty()) {
+        System.out.println(RED + "Это поле не может быть пустым!" + RESET);
+      }
+    } while (login.trim().isEmpty());
     if (userData.containsKey(login)) {
       System.out.println(RED + "Такой пользователь уже существует!" + RESET);
       System.out.println();
@@ -81,6 +105,10 @@ public class Input implements Finals {
     System.out.print("FILE DECRYPTION ");
     String filename = user.getPasswordHash().substring(2, 10);
     File file = new File("res/" + filename + ".txt");
+    if (!file.exists()){
+      file.createNewFile();
+      return;
+    }
     BufferedReader fr = new BufferedReader(new FileReader(file));
 
     //считываем категории по типам операции

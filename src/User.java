@@ -8,10 +8,13 @@ public class User {
 
   public User(String login, String password) {
     this.login = login;
-    this.passwordHash = passwordHash(password+"ax"+login);
+    this.passwordHash = passwordHash(login+"passwordHash"+password+"ax"+login);
   }
 
-  public static String passwordHash(String password) {
+  public static String makeHash (String password, String login){
+    return passwordHash(login+"passwordHash"+password+"ax"+login);
+  }
+  private static String passwordHash(String password) {
     try {
       MessageDigest md = MessageDigest.getInstance("SHA-256");
       byte[] hashedBytes = md.digest(password.getBytes(StandardCharsets.UTF_8));

@@ -211,12 +211,7 @@ public class Output implements Finals {
     }
     System.out.println("      ╰" + "─".repeat(101) + "╯");
 
-
-//      for (int i = 0; i < transactionList.size(); i++) {
-//        System.out.println(transactionList.get(i).printString(i + 1));
-//      }
-//      System.out.println("      ╰" + "─".repeat(101) + "╯");
-    Menu.menuAfterTransactionListEnds(br, transactionList, currencyList);
+    Menu.menuAfterTransactionListEnds(br, transactionList, currencyList,false);
   }
 
   public static void clearScreen() throws AWTException, InterruptedException {
@@ -238,7 +233,7 @@ public class Output implements Finals {
       clearScreen();
       System.out.println(RED + "⛔ Перед просмотром Вам необходимо создать хотя бы одну запись!" + RESET);
       System.out.println();
-      System.out.print("Нажмите ENTER для возврата в главное меню: ");
+      System.out.println(" === Нажмите ENTER для возврата в главное меню === ");
       String wait = br.readLine();
       return;
     }
@@ -251,13 +246,14 @@ public class Output implements Finals {
         current = end;
       }
       String title = String.format("[%s Показано записей: %d из %d    Период: с %s по %s %s]", YELLOW, current, end,
-          Input.dateToString(transactionList.get(end - 1).getDate(), "dd.MM.yyyy"),
-          Input.dateToString(transactionList.get(0).getDate(), "dd.MM.yyyy"), RESET);
+          Input.dateToString(transactionList.get(0).getDate(), "dd.MM.yyyy"),
+          Input.dateToString(transactionList.get(end - 1).getDate(), "dd.MM.yyyy"), RESET);
       int left = 101 / 2 - title.length() / 2;
       int right = 101 - left - title.length();
       System.out.println("      ╭" + "─".repeat(left + 5) + title + "─".repeat(right + 4) + "╮");
       for (int i = j * 10; i < current; i++) {
-        System.out.println(transactionList.get(i).printString(i + 1));
+        int ind = transactionList.size() - i - 1;
+        System.out.println(transactionList.get(ind).printString(i + 1));
       }
       String answer;
       if (current != end) {
@@ -269,11 +265,11 @@ public class Output implements Finals {
       } else {
         answer = "";
         System.out.println("      ╰" + "─".repeat(101) + "╯");
-        Menu.menuAfterTransactionListEnds(br, transactionList, currencyList);
+        Menu.menuAfterTransactionListEnds(br, transactionList, currencyList,true);
         end = transactionList.size();
       }
       if (!answer.isEmpty()) {
-        Menu.menuAnderTransactionList(br, transactionList, currencyList);
+        Menu.menuAnderTransactionList(br, transactionList, currencyList,true);
         --j;
         end = transactionList.size();
       }
@@ -281,7 +277,7 @@ public class Output implements Finals {
   }
 
   public static void showTransactionById(BufferedReader br, List<Transaction> transactionList,
-                                         List<Currency> currencyList, int index) throws IOException, InterruptedException, AWTException {
+                                         List<Currency> currencyList, int index,boolean isList10) throws IOException, InterruptedException, AWTException {
     clearScreen();
     int ind = transactionList.size() - index;
     Transaction transaction = transactionList.get(ind);
@@ -319,6 +315,6 @@ public class Output implements Finals {
     System.out.println("│    " + date);
     System.out.println("╰" + "─".repeat(45) + "┈┈┈┈┈┄┄┄┄┄┄");
 
-    Menu.menuAnderTransactionView(br, transactionList, currencyList, ind);
+    Menu.menuAnderTransactionView(br, transactionList, currencyList, ind,isList10);
   }
 }
