@@ -286,6 +286,32 @@ public class Input implements Finals {
     category.setTitle(title);
   }
 
+  public static void addCurrency(BufferedReader br, List<Currency> currencyList) throws IOException {
+    System.out.println();
+    System.out.println(BLUE + "[ ДОБАВЛЕНИЕ НОВОЙ ВАЛЮТЫ ]" + RESET);
+    String title;
+    do {
+      System.out.print("Введите название для валюты: ");
+      title = br.readLine();
+      if (title.trim().isEmpty()) {
+        System.out.println(RED + "Поле 'Название' не может быть пустым!" + RESET);
+      }
+    } while (title.trim().isEmpty());
+    String acronym;
+    do {
+      System.out.print("Введите акроним (абревиатуру) для этой валюты: ");
+      acronym = br.readLine();
+      if (acronym.trim().isEmpty()) {
+        System.out.println(RED + "Это поле не может быть пустым!" + RESET);
+      }
+    } while (acronym.trim().isEmpty());
+    System.out.print(BLUE + "Введите стартовую сумму для этой валюты: " + RESET);
+    double total = readDoubleLimited(0, Double.MAX_VALUE);
+
+    currencyList.add(new Currency(title, acronym, total));
+  }
+
+
   public static void addTransaction(BufferedReader br, List<Transaction> transactionList,
                                     List<Currency> currencyList) throws IOException {
     System.out.println(BLUE + "[ СОЗДАНИЕ НОВОЙ ЗАПИСИ ]" + RESET);
