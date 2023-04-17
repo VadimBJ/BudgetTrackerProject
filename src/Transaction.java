@@ -1,13 +1,13 @@
 import java.util.Date;
 
 public class Transaction implements Finals, Comparable<Transaction> {
-  private final String title;
-  private final String description;
+  private String title;
+  private String description;
   private final Date date;
-  private final TransactionType type;
-  private final Category category;
-  private final Currency currency;
-  private final double amount;
+  private TransactionType type;
+  private Category category;
+  private Currency currency;
+  private double amount;
 
   /**
    * конструктор транзакции
@@ -44,7 +44,7 @@ public class Transaction implements Finals, Comparable<Transaction> {
     return String.format("""
                │    %-12s       |   %s%-60s%s  %16s │
             1. │ %-15s   %-80s\u2009\u2009│%n""",
-        type.getTitle(), BLUE, category.getTitle(), RESET, Input.dateToString(date,"dd.MM.yyyy  HH:mm"), summa, shortDescription)
+        type.getTitle(), BLUE, category.getTitle(), RESET, Input.dateToString(date, "dd.MM.yyyy  HH:mm"), summa, shortDescription)
         + "    ├" + "─".repeat(101) + "┤";
   }
 
@@ -56,13 +56,16 @@ public class Transaction implements Finals, Comparable<Transaction> {
       shortDescription = (title.length() + description.length() + 2) > 80 ?
           title + ": " + description.substring(0, 75 - title.length()) + ".." : title + ": " + description;
     } else shortDescription = title;
-    String num = "000" + i;
-    num = num.substring(num.length()-3);
+    String num;
+    if (String.valueOf(i).length() < 3) {
+      num = "000" + i;
+      num = num.substring(num.length() - 3);
+    } else num = String.valueOf(i);
 
     return String.format("""
                   │    %-12s       |   %s%-60s%s  %16s │
             %5s │ %-15s   %-80s\u2009\u2009│%n""",
-        type.getTitle(), BLUE, category.getTitle(), RESET, Input.dateToString(date,"dd.MM.yyyy  HH:mm"),num, summa, shortDescription)
+        type.getTitle(), BLUE, category.getTitle(), RESET, Input.dateToString(date, "dd.MM.yyyy  HH:mm"), num, summa, shortDescription)
         + "      ├" + "─".repeat(101) + "┤";
   }
 
