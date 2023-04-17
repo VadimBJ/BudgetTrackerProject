@@ -1,7 +1,7 @@
 public class Category {
   private static int counter = 0;
   private final int id;
-  private final String title;
+  private String title;
 
   public Category(String title) {
     id = ++counter;
@@ -20,5 +20,7 @@ public class Category {
     return title;
   }
 
-
+  public void setTitle(String title) {
+    this.title = title;
+  }
 }
