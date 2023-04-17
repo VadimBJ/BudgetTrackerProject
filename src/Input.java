@@ -410,6 +410,12 @@ public class Input implements Finals {
 
     System.out.println(GREEN + "... Запись отредактирована ..." + RESET);
   }
+  public static void deleteTransaction(List<Transaction> transactionList, int index) {
+    double amount = transactionList.get(index).getAmount();
+    double total = transactionList.get(index).getCurrency().getTotal();
+    transactionList.get(index).getCurrency().setTotal(total - amount);
+    transactionList.remove(index);
+  }
 
   public static String dateToString(Date currentDate, String format) {
     SimpleDateFormat dateFormat = new SimpleDateFormat(format);
