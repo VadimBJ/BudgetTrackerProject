@@ -91,7 +91,7 @@ public class Menu implements Finals {
     switch (choice) {
       case 1 -> Output.printTransactionFilteredByType(br, transactionList, currencyList);
       case 2 -> Output.printTransactionFilteredByCategory(br, transactionList, currencyList);
-      case 3 -> System.out.println(); //todo
+      case 3 -> Output.printTransactionFilteredByCurrency(br, transactionList, currencyList);
       case 4 -> System.out.println();
     }
 

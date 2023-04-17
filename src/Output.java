@@ -8,6 +8,26 @@ import java.util.concurrent.TimeUnit;
 
 public class Output implements Finals {
 
+  public static void saveLoginFile(Map<String, String> userData) throws IOException {
+    File file = new File("res/dd2495l.txt");
+    if (!file.exists()) {
+      System.out.print(RED + "... файл не найден ..." + RESET);
+      if (file.createNewFile()) {
+        System.out.print(YELLOW + "... файл создан ..." + RESET);
+      } else {
+        System.out.print(RED + "... файл не создан ..." + RESET);
+        return;
+      }
+    }
+    FileWriter fileWriter = new FileWriter(file);
+    for (Map.Entry<String, String> loginPass : userData.entrySet()) {
+//      String line = loginPass.getKey()+";"+loginPass.getValue();
+      String line = Encryption.encryptStrCesar(loginPass.getKey() + ";" + loginPass.getValue(), 11);
+      fileWriter.write(line + "\n");
+    }
+    fileWriter.close();
+  }
+
   public static void writeToEncryptFile(List<Transaction> transactionList,
                                         List<Currency> currencyList) throws IOException, InterruptedException {
     String filename = Input.getUser().getPasswordHash().substring(2, 10);
@@ -84,34 +104,56 @@ public class Output implements Finals {
     System.out.println();
     System.out.println(GREEN + "... Файл сохранен ..." + RESET);
   }
-  public static void saveLoginFile(Map<String, String> userData) throws IOException {
-    File file = new File("res/dd2495l.txt");
-    if (!file.exists()) {
-      System.out.print(RED + "... файл не найден ..." + RESET);
-      if (file.createNewFile()) {
-        System.out.print(YELLOW + "... файл создан ..." + RESET);
-      } else {
-        System.out.print(RED + "... файл не создан ..." + RESET);
-        return;
-      }
+
+  public static void printList(List<?> listToPrint) {
+    for (Object obj : listToPrint) {
+      System.out.println(obj);
     }
-    FileWriter fileWriter = new FileWriter(file);
-    for (Map.Entry<String, String> loginPass : userData.entrySet()) {
-//      String line = loginPass.getKey()+";"+loginPass.getValue();
-      String line = Encryption.encryptStrCesar(loginPass.getKey() + ";" + loginPass.getValue(), 11);
-      fileWriter.write(line + "\n");
-    }
-    fileWriter.close();
   }
 
+  public static void printCurrencyTotal(List<Currency> currencyList) {
+    System.out.println("      ╭" + "─".repeat(37) + "[\u001B[34m Общая сумма по валютам \u001B[0m]" + "─".repeat(38) + "╮");
+    printList(currencyList);
+    System.out.println("      ╰" + "─".repeat(101) + "╯");
+  }
 
+  public static void printTransactionAll(BufferedReader br, List<Transaction> transactionList,
+                                         List<Currency> currencyList) throws AWTException, InterruptedException, IOException {
+    clearScreen();
+    if (currencyList.size() == 0 || transactionList.size() == 0) {
+      System.out.println(RED + "⛔ Перед просмотром Вам необходимо создать хотя бы одну запись!" + RESET);
+      System.out.println();
+      System.out.println(" === Нажмите ENTER для возврата в главное меню === ");
+      String wait = br.readLine();
+      return;
+    }
+    printCurrencyTotal(currencyList);
+    String title = String.format("[%s Показано записей: %d    Период: с %s по %s %s]", YELLOW, transactionList.size(),
+        Input.dateToString(transactionList.get(0).getDate(), "dd.MM.yyyy"),
+        Input.dateToString(transactionList.get(transactionList.size() - 1).getDate(), "dd.MM.yyyy"), RESET);
+    int left = 101 / 2 - title.length() / 2;
+    int right = 101 - left - title.length();
+    System.out.println("      ╭" + "─".repeat(left + 5) + title + "─".repeat(right + 4) + "╮");
 
+    for (int i = transactionList.size() - 1; i >= 0; --i) {
+      int ind = transactionList.size() - i - 1;
+      System.out.println(transactionList.get(i).printString(ind + 1));
+    }
+    System.out.println("      ╰" + "─".repeat(101) + "╯");
 
+    Menu.menuAfterTransactionListEnds(br, transactionList, currencyList, false);
+  }
 
   public static void printTransactionBy10(List<Transaction> transactionList, List<Currency> currencyList) throws AWTException, InterruptedException, IOException {
-    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));    if (currencyList.size() == 0 || transactionList.size() == 0) {      clearScreen();      System.out.println(RED + "⛔ Перед просмотром Вам необходимо создать хотя бы одну запись!" + RESET);      System.out.println();      System.out.println(" === Нажмите ENTER для возврата в главное меню === ");
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    if (currencyList.size() == 0 || transactionList.size() == 0) {
+      clearScreen();
+      System.out.println(RED + "⛔ Перед просмотром Вам необходимо создать хотя бы одну запись!" + RESET);
+      System.out.println();
+      System.out.println(" === Нажмите ENTER для возврата в главное меню === ");
       String wait = br.readLine();
-      return;}
+      return;
+    }
     int end = transactionList.size();
     for (int j = 0; j <= end / 10; j++) {
       clearScreen();
@@ -148,16 +190,10 @@ public class Output implements Finals {
         --j;
         end = transactionList.size();
       }
-    }}
+    }
+  }
 
 
-
-
-
-  public static void printList(List<?> listToPrint) {
-    for (Object obj : listToPrint) {
-      System.out.println(obj);
-    }}
   public static void printTransactionByDate(BufferedReader br, List<Transaction> transactionList,
                                             List<Currency> currencyList,
                                             Date firstDate, Date lastDate) throws AWTException, InterruptedException, IOException {
@@ -189,38 +225,6 @@ public class Output implements Finals {
     Menu.menuAfterTransactionListEnds(br, transactionList, currencyList, false);
   }
 
-
-
-  public static void printTransactionAll(BufferedReader br, List<Transaction> transactionList,
-                                         List<Currency> currencyList) throws AWTException, InterruptedException, IOException {
-
-    clearScreen();
-    if (currencyList.size() == 0 || transactionList.size() == 0) {      System.out.println(RED + "⛔ Перед просмотром Вам необходимо создать хотя бы одну запись!" + RESET);      System.out.println();      System.out.println(" === Нажмите ENTER для возврата в главное меню === ");      String wait = br.readLine();      return;    }
-
-
-
-    printCurrencyTotal(currencyList);
-    String title = String.format("[%s Показано записей: %d    Период: с %s по %s %s]", YELLOW, transactionList.size(),
-        Input.dateToString(transactionList.get(0).getDate(), "dd.MM.yyyy"),
-        Input.dateToString(transactionList.get(transactionList.size() - 1).getDate(), "dd.MM.yyyy"), RESET);
-    int left = 101 / 2 - title.length() / 2;
-    int right = 101 - left - title.length();
-    System.out.println("      ╭" + "─".repeat(left + 5) + title + "─".repeat(right + 4) + "╮");
-
-    for (int i = transactionList.size() - 1; i >= 0; --i) {
-      int ind = transactionList.size() - i - 1;
-      System.out.println(transactionList.get(i).printString(ind + 1));
-    }
-    System.out.println("      ╰" + "─".repeat(101) + "╯");
-
-    Menu.menuAfterTransactionListEnds(br, transactionList, currencyList, false);
-  }
-
-  public static void printCurrencyTotal(List<Currency> currencyList) {
-    System.out.println("      ╭" + "─".repeat(37) + "[\u001B[34m Общая сумма по валютам \u001B[0m]" + "─".repeat(38) + "╮");
-    printList(currencyList);
-    System.out.println("      ╰" + "─".repeat(101) + "╯");
-  }
   public static void showTransactionById(BufferedReader br, List<Transaction> transactionList,
                                          List<Currency> currencyList, int index, boolean isList10) throws IOException, InterruptedException, AWTException {
     clearScreen();
@@ -255,7 +259,7 @@ public class Output implements Finals {
         }
 
 
-        }
+      }
 
       System.out.println();
     }
@@ -275,7 +279,7 @@ public class Output implements Finals {
       currency.setTempTotal(0);
     }
 
-    String title = String.format("[%s Показаны только записи с типом операции: %s %s]", YELLOW, transactionType.getTitle(), RESET);
+    String title = String.format("[%s Записи отфильтрованы по типу операции: %s %s]", YELLOW, transactionType.getTitle(), RESET);
     int left = 59 - (title.length() / 2);
     int right = 59 - (title.length() / 2);
     System.out.println("      ╭" + "─".repeat(left) + title + "─".repeat(right) + "╮");
@@ -304,7 +308,6 @@ public class Output implements Finals {
 
   }
 
-
   public static void printTransactionFilteredByCategory(BufferedReader br, List<Transaction> transactionList,
                                                         List<Currency> currencyList) throws IOException, InterruptedException, AWTException {
     TransactionType transactionType = Input.takeType();
@@ -314,7 +317,7 @@ public class Output implements Finals {
       currency.setTempTotal(0);
     }
 
-    String title = String.format("[%s Показаны только записи из категории: %s %s]", YELLOW, category.getTitle(), RESET);
+    String title = String.format("[%s Записи отфильтрованы по категории: %s %s]", YELLOW, category.getTitle(), RESET);
     int left = 50 - (title.length() - 9) / 2;
     int right = 101 - (title.length() - 9) - left;
     System.out.println("      ╭" + "─".repeat(left) + title + "─".repeat(right) + "╮");
@@ -334,6 +337,34 @@ public class Output implements Finals {
       String line = String.format("%s : %15.2f %3s", currency.getTitle(), currency.getTempTotal(), currency.getAcronym());
       System.out.printf("      │ %99s │%n", line);
     }
+    System.out.println("      ╰" + "─".repeat(101) + "╯");
+    Menu.menuAfterTransactionListEnds(br, transactionList, currencyList, false);
+  }
+
+  public static void printTransactionFilteredByCurrency(BufferedReader br, List<Transaction> transactionList,
+                                                        List<Currency> currencyList) throws IOException, InterruptedException, AWTException {
+    Currency currencyFilter = Input.takeCurrency(currencyList);
+    for (Currency currency : currencyList) {
+      currency.setTempTotal(0);
+    }
+    clearScreen();
+    String title = String.format("[%s Записи отфильтрованы по валюте: %s %s]", YELLOW, currencyFilter.getTitle(), RESET);
+    int left = 50 - (title.length() - 9) / 2;
+    int right = 101 - (title.length() - 9) - left;
+    System.out.println("      ╭" + "─".repeat(left) + title + "─".repeat(right) + "╮");
+    for (int i = transactionList.size() - 1; i >= 0; --i) {
+      int ind = transactionList.size() - i - 1;
+      if (transactionList.get(i).getCurrency() == currencyFilter) {
+        System.out.println(transactionList.get(i).printString(ind + 1));
+      }
+    }
+    System.out.println("      ╰" + "─".repeat(101) + "╯");
+    System.out.println("      ╭" + "─".repeat(32) +
+        "[\u001B[34m Итоговая сумма в выбранной валюте \u001B[0m]" + "─".repeat(32) + "╮");
+
+      String line = String.format("%s : %15.2f %3s", currencyFilter.getTitle(), currencyFilter.getTotal(), currencyFilter.getAcronym());
+      System.out.printf("      │ %99s │%n", line);
+
     System.out.println("      ╰" + "─".repeat(101) + "╯");
     Menu.menuAfterTransactionListEnds(br, transactionList, currencyList, false);
   }
