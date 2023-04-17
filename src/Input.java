@@ -346,6 +346,7 @@ public class Input implements Finals {
 
   public static void addTransaction(BufferedReader br, List<Transaction> transactionList,
                                     List<Currency> currencyList) throws IOException {
+    System.out.println();
     System.out.println(BLUE + "[ СОЗДАНИЕ НОВОЙ ЗАПИСИ ]" + RESET);
     String title;
     do {
