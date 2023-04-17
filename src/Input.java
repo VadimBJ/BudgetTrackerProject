@@ -367,7 +367,48 @@ public class Input implements Finals {
     Date date = new Date();
     transactionList.add(new Transaction(title, description, transactionType, category, currency, amount, date));
     System.out.println(GREEN + "... Запись добавлена ..." + RESET);
-    Collections.sort(transactionList);
+  }
+
+  public static void editTransaction(BufferedReader br, List<Transaction> transactionList,
+                                     List<Currency> currencyList, int index) throws IOException {
+    String num;
+    if (String.valueOf(index).length() < 3) {
+      num = "000" + (transactionList.size() - index);
+      num = num.substring(num.length() - 3);
+    } else num = String.valueOf(index);
+    System.out.println();
+    System.out.println(BLUE + "[ РЕДАКТИРОВАНИЕ ЗАПИСИ " + num + " ]" + RESET);
+    System.out.println();
+    String title;
+    do {
+      System.out.print("Введите название для записи: ");
+      title = br.readLine();
+      if (title.trim().isEmpty()) {
+        System.out.println(RED + "Поле 'Название' не может быть пустым!" + RESET);
+      }
+    } while (title.trim().isEmpty());
+    System.out.println(CYAN + "Поле 'Описание' может быть пустым" + RESET);
+    System.out.print("Введите детальное описание задачи: ");
+    String description = br.readLine().trim();
+    TransactionType transactionType = takeType();
+    Category category = takeCategory(transactionType);
+    Currency currency = takeCurrency(currencyList);
+    System.out.print(BLUE + "Введите сумму операции: " + RESET);
+    double amount = Math.abs(readDoubleLimited(-Double.MAX_VALUE, Double.MAX_VALUE));
+    amount = transactionType == TransactionType.INCOMING ? amount : -amount;
+    Transaction transaction = transactionList.get(index);
+
+    transaction.getCurrency().setTotal(transaction.getCurrency().getTotal() - transaction.getAmount());
+    currency.setTotal(currency.getTotal() + amount);
+
+    transaction.setTitle(title);
+    transaction.setDescription(description);
+    transaction.setType(transactionType);
+    transaction.setCategory(category);
+    transaction.setCurrency(currency);
+    transaction.setAmount(amount);
+
+    System.out.println(GREEN + "... Запись отредактирована ..." + RESET);
   }
 
   public static String dateToString(Date currentDate, String format) {
