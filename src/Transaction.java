@@ -69,6 +69,30 @@ public class Transaction implements Finals, Comparable<Transaction> {
         + "      ├" + "─".repeat(101) + "┤";
   }
 
+  public void setTitle(String title) {
+    this.title = title;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public void setType(TransactionType type) {
+    this.type = type;
+  }
+
+  public void setCategory(Category category) {
+    this.category = category;
+  }
+
+  public void setCurrency(Currency currency) {
+    this.currency = currency;
+  }
+
+  public void setAmount(double amount) {
+    this.amount = amount;
+  }
+
   public String getTitle() {
     return title;
   }
