@@ -73,6 +73,7 @@ public class Menu implements Finals {
         case 8 -> menuEditCategoryCurrency(br, currencyList);
         case 9 -> Output.writeToEncryptFile(transactionList, currencyList);
         case 0 -> System.exit(0); //todo меню для выхода с сохранением данных
+        default -> System.out.println();
       }
     }
   }
@@ -94,7 +95,30 @@ public class Menu implements Finals {
     }
   }
 
-
+  public static void menuPrintTransactionByDate(BufferedReader br, List<Transaction> transactionList,
+                                                List<Currency> currencyList) throws IOException, InterruptedException, AWTException {
+    System.out.println();
+    System.out.println(BLUE + "[ ВЫБОР ПЕРИОДА ДЛЯ ОТОБРАЖЕНИЯ ]" + RESET);
+    System.out.println();
+    Date firstDate;
+    Date lastDate;
+    do {
+      do {
+        System.out.print("Введите начальную дату в формате [дд.ММ.гггг]: ");
+        firstDate = Input.dateFromString(br.readLine() + "  00:00");
+      } while (firstDate == null);
+      do {
+        System.out.print("Введите конечную дату в формате [дд.ММ.гггг]: ");
+        lastDate = Input.dateFromString(br.readLine() + "  23:59");
+      } while (lastDate == null);
+      if (firstDate.after(lastDate)) {
+        System.out.println(RED + "Начальная дата не может быть позже конечной!" + RESET);
+      }
+    } while (firstDate.after(lastDate));
+//    Date firstDate = Input.dateFromString("10.04.2023  00:00");
+//    Date lastDate = Input.dateFromString("15.04.2023  23:59"); //todo считывание дат
+    Output.printTransactionByDate(br, transactionList, currencyList, firstDate, lastDate);
+  }
 
   public static void menuAnderTransactionList(BufferedReader br, List<Transaction> transactionList,
                                               List<Currency> currencyList, boolean isList10) throws IOException, InterruptedException, AWTException {
@@ -168,4 +192,3 @@ public class Menu implements Finals {
   }
 
 }
-
