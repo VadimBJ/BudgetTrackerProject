@@ -233,6 +233,24 @@ public class Input implements Finals {
     }
   }
 
+  public static TransactionType takeType() throws IOException {
+    int lastOfNum = 1;
+    System.out.println("Выберите тип категории:");
+    for (TransactionType values : TransactionType.values()) {
+      System.out.println("  " + values.getId() + ". " + values.getTitle());
+      lastOfNum = values.getId();
+    }
+    System.out.print("Введите номер пункта меню: ");
+    int choice = readIntLimited(1, lastOfNum);
+    TransactionType priority = null;
+    for (TransactionType values : TransactionType.values()) {
+      if (values.getId() == choice) {
+        priority = values;
+      }
+    }
+    return priority;
+  }
+
   public static void addCategory(BufferedReader br) throws IOException {
     TransactionType transactionType = takeType();
     String title;
