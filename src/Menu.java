@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +36,7 @@ public class Menu implements Finals {
     } while (!isLogin);
   }
 
-  public static void menuMain(BufferedReader br, List<Transaction> transactionList,
+  public static void menuMain(List<Transaction> transactionList,
                               List<Currency> currencyList) throws IOException, AWTException, InterruptedException {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     while (true) {
@@ -75,6 +77,25 @@ public class Menu implements Finals {
     }
   }
 
+  public static void menuEditCategoryCurrency(BufferedReader br, List<Currency> currencyList) throws IOException {
+    System.out.println();
+    System.out.println(BLUE + "[ ВЫБОР ОБЪЕКТА ДЛЯ РЕДАКТИРОВАНИЯ ]" + RESET);
+    System.out.println("""
+        Что Вы хотите отредактировать:
+          𝟙. Редактировать категорию
+          𝟚. Редактировать валюту
+          𝟛. Вернуться в главное меню""");
+    System.out.print("Введите номер пункта меню: ");
+    int choice = Input.readIntLimited(1, 3);
+    switch (choice) {
+      case 1 -> Input.editCategory(br);
+      case 2 -> Input.editCurrency(br, currencyList);
+      default -> System.out.println();
+    }
+  }
+
+
+
   public static void menuAnderTransactionList(BufferedReader br, List<Transaction> transactionList,
                                               List<Currency> currencyList, boolean isList10) throws IOException, InterruptedException, AWTException {
     System.out.println("""
@@ -94,7 +115,7 @@ public class Menu implements Finals {
         System.out.print(BLUE + "Введите Id нужной записи: " + RESET);
         Input.deleteTransaction(transactionList, transactionList.size() - Input.readIntLimited(1, transactionList.size()));
       }
-      case 3 -> Menu.menuMain(br, transactionList, currencyList);
+      case 3 -> Menu.menuMain(transactionList, currencyList);
       case 4 -> System.out.println(" ");
 
     }
@@ -118,7 +139,7 @@ public class Menu implements Finals {
         System.out.print(BLUE + "Введите Id нужной записи: " + RESET);
         Input.deleteTransaction(transactionList, transactionList.size() - Input.readIntLimited(1, transactionList.size()));
       }
-      case 3 -> Menu.menuMain(br, transactionList, currencyList);
+      case 3 -> Menu.menuMain(transactionList, currencyList);
     }
   }
 
@@ -139,9 +160,9 @@ public class Menu implements Finals {
       choice = Input.readIntLimited(1, 3);
     }
     switch (choice) {
-      case 1 -> Input.deleteTransaction(transactionList, index); //todo учитывать в общей сумме
-      case 2 -> System.out.println(" ");//todo 2. редактировать запись
-      case 3 -> Menu.menuMain(br, transactionList, currencyList);
+      case 1 -> Input.deleteTransaction(transactionList, index);
+      case 2 -> Input.editTransaction(br, transactionList, currencyList, index);
+      case 3 -> Menu.menuMain(transactionList, currencyList);
       case 4 -> System.out.print(" ");
     }
   }
