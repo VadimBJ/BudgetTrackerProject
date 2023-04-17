@@ -311,6 +311,38 @@ public class Input implements Finals {
     currencyList.add(new Currency(title, acronym, total));
   }
 
+  public static Currency takeCurrency(List<Currency> currencyList) throws IOException {
+    System.out.println("Выберите валюту:");
+    for (int i = 0; i < currencyList.size(); i++) {
+      System.out.println("  " + (i + 1) + ". " + currencyList.get(i).getAcronym());
+    }
+    System.out.print("Введите номер пункта меню: ");
+    int choice = readIntLimited(1, currencyList.size()) - 1;
+    return currencyList.get(choice);
+  }
+
+  public static void editCurrency(BufferedReader br, List<Currency> currencyList) throws IOException {
+    System.out.println();
+    Currency currency = takeCurrency(currencyList);
+    String title;
+    do {
+      System.out.print("Введите новое название для валюты: ");
+      title = br.readLine();
+      if (title.trim().isEmpty()) {
+        System.out.println(RED + "Поле 'Название' не может быть пустым!" + RESET);
+      }
+    } while (title.trim().isEmpty());
+    String acronym;
+    do {
+      System.out.print("Введите акроним (абревиатуру) для этой валюты: ");
+      acronym = br.readLine();
+      if (acronym.trim().isEmpty()) {
+        System.out.println(RED + "Это поле не может быть пустым!" + RESET);
+      }
+    } while (acronym.trim().isEmpty());
+    currency.setTitle(title);
+    currency.setAcronym(acronym);
+  }
 
   public static void addTransaction(BufferedReader br, List<Transaction> transactionList,
                                     List<Currency> currencyList) throws IOException {
