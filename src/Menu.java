@@ -36,6 +36,7 @@ public class Menu implements Finals {
 
   public static void menuMain(BufferedReader br, List<Transaction> transactionList,
                               List<Currency> currencyList) throws IOException, AWTException, InterruptedException {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     while (true) {
       Output.clearScreen();
       System.out.println(LOGO2);
@@ -50,24 +51,25 @@ public class Menu implements Finals {
             𝟝. Отфильтровать записи по выбранному критерию
             𝟞. Добавить новую категорию
             𝟟. Добавить новую валюту
-            𝟠. Сохранить все данные в файл
+            𝟠. Редактировать категории/валюты
+            𝟡. Сохранить все данные в файл
             
             𝟘. Выход
           """);
       System.out.print("Введите номер пункта меню: ");
-      int choice = Input.readIntLimited(0, 8);
+      int choice = Input.readIntLimited(0, 9);
       switch (choice) {
         case 1 -> Input.addTransaction(br, transactionList, currencyList);
         case 2 -> Output.printTransactionAll(br, transactionList, currencyList);
         case 3 -> Output.printTransactionBy10(transactionList, currencyList);
-        //todo Посмотреть записи за указанный период времени
-        //todo Отфильтровать записи по выбранному критерию
+        case 4 -> menuPrintTransactionByDate(br, transactionList, currencyList);
+
+        //todo Отфильтровать записи по выбранному критерию / изменить вывод / добавить темпсумму в валюты
 
         case 6 -> Input.addCategory(br);
-
-        //todo Добавить новую валюту
-
-        case 8 -> Output.writeToEncryptFile(transactionList, currencyList);
+        case 7 -> Input.addCurrency(br, currencyList);
+        case 8 -> menuEditCategoryCurrency(br, currencyList);
+        case 9 -> Output.writeToEncryptFile(transactionList, currencyList);
         case 0 -> System.exit(0); //todo меню для выхода с сохранением данных
       }
     }
