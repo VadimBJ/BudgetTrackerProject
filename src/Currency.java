@@ -1,8 +1,8 @@
 public class Currency {
   private static int counter = 0;
   private final int id;
-  private final String title;
-  private final String acronym;
+  private String title;
+  private String acronym;
   private double total;
 
   public Currency(String title, String acronym, double total) {
@@ -14,8 +14,8 @@ public class Currency {
 
   @Override
   public String toString() {
-    String line = String.format("%s : %15.2f %3s",title,total,acronym);
-    return String.format("      │ %99s │",line);
+    String line = String.format("%s : %15.2f %3s", title, total, acronym);
+    return String.format("      │ %99s │", line);
   }
 
   public void setTotal(double total) {
@@ -32,5 +32,13 @@ public class Currency {
 
   public double getTotal() {
     return total;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
+  }
+
+  public void setAcronym(String acronym) {
+    this.acronym = acronym;
   }
 }
