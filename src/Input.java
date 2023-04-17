@@ -13,12 +13,7 @@ public class Input implements Finals {
     return user;
   }
 
-  public static void deleteTransaction(List<Transaction> transactionList, int index) {
-    double amount = transactionList.get(index).getAmount();
-    double total = transactionList.get(index).getCurrency().getTotal();
-    transactionList.get(index).getCurrency().setTotal(total - amount);
-    transactionList.remove(index);
-  }
+
 
   public static void initializeData(List<Currency> currencyList) {
     //инициализация категорий
@@ -49,12 +44,12 @@ public class Input implements Finals {
     String expectPasswordHash = userData.get(login);
     System.out.print("Введите Ваш пароль: ");
     String password = br.readLine();
-    if (!expectPasswordHash.equals(User.makeHash(password,login))) {
+    if (!expectPasswordHash.equals(User.makeHash(password, login))) {
       System.out.println(RED + "Введен неправильный пароль!" + RESET);
 
-      System.out.println("p:  "+password);
-      System.out.println("ph: "+expectPasswordHash);
-      System.out.println("ph: "+User.makeHash(password,login));
+      System.out.println("p:  " + password);
+      System.out.println("ph: " + expectPasswordHash);
+      System.out.println("ph: " + User.makeHash(password, login));
 
       System.out.println();
       System.out.println("Возможно Вам нужен пункт регистрации нового пользователя");
@@ -64,7 +59,7 @@ public class Input implements Finals {
     return true;
   }
 
-  public static boolean userNewRead(Map<String, String> userData) throws IOException { //todo
+  public static boolean userNewRead(Map<String, String> userData) throws IOException {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     String login;
     do {
@@ -96,8 +91,6 @@ public class Input implements Finals {
       String[] values = line.split(";", 2);
       userData.put(values[0], values[1]);
     }
-
-
   }
 
   public static void readFromEncryptFile(List<Transaction> transactionList,
@@ -105,7 +98,7 @@ public class Input implements Finals {
     System.out.print("FILE DECRYPTION ");
     String filename = user.getPasswordHash().substring(2, 10);
     File file = new File("res/" + filename + ".txt");
-    if (!file.exists()){
+    if (!file.exists()) {
       file.createNewFile();
       return;
     }
@@ -252,6 +245,8 @@ public class Input implements Finals {
   }
 
   public static void addCategory(BufferedReader br) throws IOException {
+    System.out.println();
+    System.out.println(BLUE + "[ ДОБАВЛЕНИЕ НОВОЙ КАТЕГОРИИ ]" + RESET);
     TransactionType transactionType = takeType();
     String title;
     do {
@@ -262,6 +257,33 @@ public class Input implements Finals {
       }
     } while (title.trim().isEmpty());
     transactionType.getCategoryList().add(new Category(title));
+  }
+
+  public static Category takeCategory(TransactionType transactionType) throws IOException {
+    List<Category> categoryList = transactionType.getCategoryList();
+    System.out.println("Выберите категорию:");
+    for (int i = 0; i < categoryList.size(); i++) {
+      System.out.println("  " + (i + 1) + ". " + categoryList.get(i).getTitle());
+    }
+    System.out.print("Введите номер пункта меню: ");
+    int choice = readIntLimited(1, categoryList.size()) - 1;
+    return categoryList.get(choice);
+  }
+
+  public static void editCategory (BufferedReader br) throws IOException {
+    System.out.println();
+    TransactionType transactionType = takeType();
+    Category category = takeCategory(transactionType);
+    String title;
+    do {
+      System.out.print(BLUE+"Введите новое название для категории: "+RESET);
+      title = br.readLine();
+      if (title.trim().isEmpty()) {
+        System.out.println(RED + "Поле 'Название' не может быть пустым!" + RESET);
+      }
+    } while (title.trim().isEmpty());
+
+    category.setTitle(title);
   }
 
   public static void addTransaction(BufferedReader br, List<Transaction> transactionList,
@@ -306,48 +328,9 @@ public class Input implements Finals {
     return currentDate;
   }
 
-  public static TransactionType takeType() throws IOException {
-    int lastOfNum = 1;
-    System.out.println("Выберите тип операции:");
-    for (TransactionType values : TransactionType.values()) {
-      System.out.println("  " + values.getId() + ". " + values.getTitle());
-      lastOfNum = values.getId();
-    }
-    System.out.print("Введите номер пункта меню: ");
-    int choice = readIntLimited(1, lastOfNum);
-    TransactionType priority = null;
-    for (TransactionType values : TransactionType.values()) {
-      if (values.getId() == choice) {
-        priority = values;
-      }
-    }
-    return priority;
-  }
-
-  public static Category takeCategory(TransactionType transactionType) throws IOException {
-    List<Category> categoryList = transactionType.getCategoryList();
-    System.out.println("Выберите категорию:");
-    for (int i = 0; i < categoryList.size(); i++) {
-      System.out.println("  " + (i + 1) + ". " + categoryList.get(i).getTitle());
-    }
-    System.out.print("Введите номер пункта меню: ");
-    int choice = readIntLimited(1, categoryList.size()) - 1;
-    return categoryList.get(choice);
-  }
-
-  public static Currency takeCurrency(List<Currency> currencyList) throws IOException {
-    System.out.println("Выберите валюту:");
-    for (int i = 0; i < currencyList.size(); i++) {
-      System.out.println("  " + (i + 1) + ". " + currencyList.get(i).getAcronym());
-    }
-    System.out.print("Введите номер пункта меню: ");
-    int choice = readIntLimited(1, currencyList.size()) - 1;
-    return currencyList.get(choice);
-  }
-
   public static int readIntLimited(int min, int max) throws IOException {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    int num = 0;
+    int num = -1;
     do {
       try {
         num = Integer.parseInt(br.readLine());
@@ -363,17 +346,26 @@ public class Input implements Finals {
 
   public static double readDoubleLimited(double min, double max) throws IOException {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    boolean isWrong = true;
     double num = 0;
     do {
       try {
         num = Double.parseDouble(br.readLine());
+        isWrong = false;
       } catch (NumberFormatException e) {
         System.out.println("\u001B[31mВводите только цифры!\u001B[0m");
+        System.out.print("Попробуйте еще разок: ");
       }
       if (!(num >= min && num <= max)) {
-        System.out.printf("Введите число от %f до %f: ", min, max);
+        isWrong=true;
+        if (min == 0 && max == Double.MAX_VALUE) {
+          System.out.println(RED + "Вводите только положительные значение!" + RESET);
+          System.out.print("Попробуйте еще разок: ");
+        } else {
+          System.out.printf("Введите число от %f до %f: ", min, max);
+        }
       }
-    } while (!(num >= min && num <= max));
+    } while (isWrong);
     return num;
   }
 }
