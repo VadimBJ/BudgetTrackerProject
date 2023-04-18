@@ -1,13 +1,10 @@
 public class Currency {
-  private static int counter = 0;
-  private final int id;
   private String title;
   private String acronym;
   private double total;
   private double tempTotal;
 
   public Currency(String title, String acronym, double total) {
-    id = ++counter;
     this.title = title;
     this.acronym = acronym;
     this.total = total;
