@@ -21,7 +21,6 @@ public class Output implements Finals {
     }
     FileWriter fileWriter = new FileWriter(file);
     for (Map.Entry<String, String> loginPass : userData.entrySet()) {
-//      String line = loginPass.getKey()+";"+loginPass.getValue();
       String line = Encryption.encryptStrCesar(loginPass.getKey() + ";" + loginPass.getValue(), 11);
       fileWriter.write(line + "\n");
     }
@@ -304,8 +303,6 @@ public class Output implements Finals {
     System.out.println("      ╰" + "─".repeat(101) + "╯");
 
     Menu.menuAfterTransactionListEnds(br, transactionList, currencyList, false);
-
-
   }
 
   public static void printTransactionFilteredByCategory(BufferedReader br, List<Transaction> transactionList,
@@ -380,8 +377,5 @@ public class Output implements Finals {
     robot.keyRelease(KeyEvent.VK_ALT);
     robot.keyRelease(KeyEvent.VK_CONTROL);
     TimeUnit.MILLISECONDS.sleep(50);
-
-
   }
-
 }
