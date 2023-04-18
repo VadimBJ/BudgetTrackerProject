@@ -165,66 +165,6 @@ public class Input implements Finals {
     Collections.sort(transactionList);
   }
 
-  public static void readFromFile(List<Transaction> transactionList,
-                                  List<Currency> currencyList) throws IOException {
-    File file = new File("res/Test.csv");
-    BufferedReader fr = new BufferedReader(new FileReader(file));
-
-    //считываем категории по типам операции
-    for (int j = 0; j < 2; j++) {
-      String line = fr.readLine();
-      String[] value = line.split(";", -1);
-      TransactionType type = TransactionType.valueOf(value[0]);
-      int num = Integer.parseInt(value[1]);
-      for (int i = 2; i < num + 2; i++) {
-        type.getCategoryList().add(new Category(value[i]));
-      }
-    }
-
-    //считываем валюты
-    String line = fr.readLine();
-    String[] value = line.split(";", -1);
-    int num = Integer.parseInt(value[0]);
-    for (int i = 0; i < num * 2; i += 2) {
-      String title = value[1 + i];
-      String acronym = value[2 + i];
-      currencyList.add(new Currency(title, acronym, 0));
-    }
-
-    //считываем все записи
-    num = Integer.parseInt(fr.readLine());
-    for (int i = 0; i < num; i++) {
-      line = fr.readLine();
-      value = line.split(";", -1);
-      String title = value[0];
-      String description = value[1];
-      TransactionType type = TransactionType.valueOf(value[2]);
-
-      int categoryIndex = 0;
-      for (Category category : type.getCategoryList()) {
-        if (category.getTitle().equals(value[3])) {
-          break;
-        } else {
-          ++categoryIndex;
-        }
-      }
-
-      int currencyIndex = 0;
-      for (Currency currency : currencyList) {
-        if (currency.getAcronym().equals(value[4])) {
-          break;
-        } else {
-          ++currencyIndex;
-        }
-      }
-
-      double amount = Double.parseDouble(value[5]);
-      Date date = dateFromString(value[6]);
-      transactionList.add(new Transaction(title, description, type, type.getCategoryList().get(categoryIndex),
-          currencyList.get(currencyIndex), amount, date));
-    }
-  }
-
   public static TransactionType takeType() throws IOException {
     int lastOfNum = 1;
     System.out.println("Выберите тип категории:");
