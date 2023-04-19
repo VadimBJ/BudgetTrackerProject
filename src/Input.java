@@ -13,7 +13,13 @@ public class Input implements Finals {
     return user;
   }
 
-
+  /**
+   * Инициализирует начальное состояние:
+   * Создает по одной категории в расходах и доходах, а так же создает одну валюту
+   * для того чтобы пользователь мог сразу приступить к созданию записей
+   *
+   * @param currencyList список доступных валют
+   */
   public static void initializeData(List<Currency> currencyList) {
     //инициализация категорий
     TransactionType.INCOMING.getCategoryList().add(new Category("Доходы"));
@@ -21,9 +27,14 @@ public class Input implements Finals {
 
     //инициализация валют
     currencyList.add(new Currency("US dollar", "USD", 0));
-    currencyList.add(new Currency("EURO", "EUR", 0));
   }
 
+  /**
+   * Считывает данные для авторизации уже существующего пользователя
+   *
+   * @param userData хранит в себе пары login:passwordHash
+   * @return возвращает true если авторизация прошла успешно
+   */
   public static boolean userLoginRead(Map<String, String> userData) throws IOException {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     String login;
@@ -53,6 +64,12 @@ public class Input implements Finals {
     return true;
   }
 
+  /**
+   * Считывает данные для авторизации нового пользователя
+   *
+   * @param userData хранит в себе пары login:passwordHash
+   * @return возвращает true если авторизация прошла успешно
+   */
   public static boolean userNewRead(Map<String, String> userData) throws IOException {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     String login;
@@ -77,6 +94,11 @@ public class Input implements Finals {
     return true;
   }
 
+  /**
+   * Считывает зашифрованный файл содержащий данные для авториции пользователей
+   *
+   * @param userData хранит в себе пары login:passwordHash
+   */
   public static void readLoginFile(Map<String, String> userData) throws IOException {
     File file = new File("res/dd2495l.txt");
     BufferedReader fr = new BufferedReader(new FileReader(file));
@@ -87,13 +109,19 @@ public class Input implements Finals {
     }
   }
 
+  /**
+   * считывает зашифрованный файл данных пользователя (в качестве имени файла используется часть хеша пароля пользователя)
+   * расшифровывает данные и сохраняет их в соответствующие списки
+   * @param transactionList список созданных записей
+   * @param currencyList список доступных валют
+   */
   public static void readFromEncryptFile(List<Transaction> transactionList,
                                          List<Currency> currencyList) throws IOException, InterruptedException {
-    System.out.print("FILE DECRYPTION ");
+    System.out.print("FILE DECRYPTION |");
     String filename = user.getPasswordHash().substring(2, 10);
     File file = new File("res/" + filename + ".txt");
     if (!file.exists()) {
-      file.createNewFile();
+      if (file.createNewFile()) System.out.println("... Файл создан ...");
       return;
     }
     BufferedReader fr = new BufferedReader(new FileReader(file));
