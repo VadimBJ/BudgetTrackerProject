@@ -45,11 +45,6 @@ public class Input implements Finals {
     String password = br.readLine();
     if (!expectPasswordHash.equals(User.makeHash(password, login))) {
       System.out.println(RED + "Введен неправильный пароль!" + RESET);
-
-      System.out.println("p:  " + password);
-      System.out.println("ph: " + expectPasswordHash);
-      System.out.println("ph: " + User.makeHash(password, login));
-
       System.out.println();
       System.out.println("Возможно Вам нужен пункт регистрации нового пользователя");
       return false;
@@ -77,7 +72,7 @@ public class Input implements Finals {
     System.out.print("Введите Ваш пароль: ");
     String password = br.readLine();
     user = new User(login, password);
-    userData.put(login, user.getPasswordHash());
+    userData.put(user.getLogin(), user.getPasswordHash());
     Output.saveLoginFile(userData);
     return true;
   }
@@ -296,7 +291,7 @@ public class Input implements Finals {
       }
     } while (title.trim().isEmpty());
     System.out.println(CYAN + "Поле 'Описание' может быть пустым" + RESET);
-    System.out.print("Введите детальное описание задачи: ");
+    System.out.print("Введите детальное описание записи: ");
     String description = br.readLine().trim();
     TransactionType transactionType = takeType();
     Category category = takeCategory(transactionType);
@@ -328,7 +323,7 @@ public class Input implements Finals {
       }
     } while (title.trim().isEmpty());
     System.out.println(CYAN + "Поле 'Описание' может быть пустым" + RESET);
-    System.out.print("Введите детальное описание задачи: ");
+    System.out.print("Введите детальное описание записи: ");
     String description = br.readLine().trim();
     TransactionType transactionType = takeType();
     Category category = takeCategory(transactionType);
