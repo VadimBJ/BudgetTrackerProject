@@ -3,7 +3,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class User {
-  private String login;
+  private final String login;
   private String passwordHash;
 
   public User(String login, String password) {
