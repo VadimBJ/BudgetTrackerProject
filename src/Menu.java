@@ -70,8 +70,33 @@ public class Menu implements Finals {
         case 7 -> Input.addCurrency(br, currencyList);
         case 8 -> menuEditCategoryCurrency(br, currencyList);
         case 9 -> Output.writeToEncryptFile(transactionList, currencyList);
-        case 0 -> System.exit(0); //todo меню для выхода с сохранением данных
-        default -> System.out.println();
+        case 0 -> menuExit(transactionList,currencyList);
+      }
+    }
+  }
+
+  public static void menuExit(List<Transaction> transactionList, List<Currency> currencyList) throws IOException,
+      InterruptedException, AWTException {
+    System.out.println();
+    System.out.println(BLUE + "[ ВЫХОД ИЗ ПРОГРАММЫ ]" + RESET);
+    System.out.println("""
+        Доступные действия:
+          𝟙. Сменить учетную запись
+          𝟚. Выйти из программы""");
+    System.out.print("Введите номер пункта меню: ");
+    int choice = Input.readIntLimited(1, 2);
+    switch (choice) {
+      case 1 -> {
+        Output.writeToEncryptFile(transactionList, currencyList);
+        Output.clearScreen();
+        BudgetTrackerRunner.main(new String[]{});
+      }
+      case 2 -> {
+        Output.writeToEncryptFile(transactionList, currencyList);
+        System.out.println();
+        System.out.println(BLUE+"До скорой встречи!"+RESET);
+        System.out.println();
+        System.exit(0);
       }
     }
   }
