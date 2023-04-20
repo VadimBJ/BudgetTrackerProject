@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-
 public class Menu implements Finals {
   private static boolean isRepeat = true;
 
@@ -174,8 +173,16 @@ public class Menu implements Finals {
     }
   }
 
+  /**
+   * меню выбора начальной и конечной даты для отображения записей за выбранный период
+   *
+   * @param br              BufferedReader, для считывания ввода пользователя
+   * @param transactionList список созданных записей
+   * @param currencyList    список доступных валют
+   */
   public static void menuPrintTransactionByDate(BufferedReader br, List<Transaction> transactionList,
-                                                List<Currency> currencyList) throws IOException, InterruptedException, AWTException {
+                                                List<Currency> currencyList)
+      throws IOException, InterruptedException, AWTException {
     System.out.println();
     System.out.println(BLUE + "[ ВЫБОР ПЕРИОДА ДЛЯ ОТОБРАЖЕНИЯ ]" + RESET);
     System.out.println();
@@ -197,8 +204,18 @@ public class Menu implements Finals {
     Output.printTransactionByDate(br, transactionList, currencyList, firstDate, lastDate);
   }
 
+  /**
+   * меню под списком всех записей
+   *
+   * @param br              BufferedReader, для считывания ввода пользователя
+   * @param transactionList список созданных записей
+   * @param currencyList    список доступных валют
+   * @param isList10        служит для отслеживания места откуда было вызвано меню
+   *                        и проброса этого параметра в showTransactionById
+   */
   public static void menuAnderTransactionList(BufferedReader br, List<Transaction> transactionList,
-                                              List<Currency> currencyList, boolean isList10) throws IOException, InterruptedException, AWTException {
+                                              List<Currency> currencyList, boolean isList10)
+      throws IOException, InterruptedException, AWTException {
     System.out.println("""
         Доступные действия:
           𝟙. Просмотреть запись по Id
@@ -222,8 +239,18 @@ public class Menu implements Finals {
     }
   }
 
+  /**
+   * меню под списком всех задач по окончанию вывода их по 10
+   *
+   * @param br              BufferedReader, для считывания ввода пользователя
+   * @param transactionList список созданных записей
+   * @param currencyList    список доступных валют
+   * @param isList10        служит для отслеживания места откуда было вызвано меню
+   *                        и проброса этого параметра в showTransactionById
+   */
   public static void menuAfterTransactionListEnds(BufferedReader br, List<Transaction> transactionList,
-                                                  List<Currency> currencyList, boolean isList10) throws IOException, InterruptedException, AWTException {
+                                                  List<Currency> currencyList, boolean isList10)
+      throws IOException, InterruptedException, AWTException {
     System.out.println("""
         Доступные действия:
           𝟙. Просмотреть запись по Id
@@ -244,8 +271,18 @@ public class Menu implements Finals {
     }
   }
 
+  /**
+   * меню под просмотром транзакции по Id
+   *
+   * @param br              BufferedReader, для считывания ввода пользователя
+   * @param transactionList список созданных записей
+   * @param currencyList    список доступных валют
+   * @param index           индекс транзакции в transactionList
+   * @param isList10        служит для отслеживания места откуда было вызвано меню
+   */
   public static void menuAnderTransactionView(BufferedReader br, List<Transaction> transactionList,
-                                              List<Currency> currencyList, int index, boolean isList10) throws IOException, InterruptedException, AWTException {
+                                              List<Currency> currencyList, int index, boolean isList10)
+      throws IOException, InterruptedException, AWTException {
     System.out.println("""
         Доступные действия:
           𝟙. Удалить эту запись
@@ -267,5 +304,4 @@ public class Menu implements Finals {
       case 4 -> System.out.print(" ");
     }
   }
-
 }
