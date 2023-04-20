@@ -112,12 +112,13 @@ public class Input implements Finals {
   /**
    * считывает зашифрованный файл данных пользователя (в качестве имени файла используется часть хеша пароля пользователя)
    * расшифровывает данные и сохраняет их в соответствующие списки
+   *
    * @param transactionList список созданных записей
-   * @param currencyList список доступных валют
+   * @param currencyList    список доступных валют
    */
   public static void readFromEncryptFile(List<Transaction> transactionList,
                                          List<Currency> currencyList) throws IOException, InterruptedException {
-    System.out.print("FILE DECRYPTION |");
+    System.out.print("FILE DECRYPTION |\u2009");
     String filename = user.getPasswordHash().substring(2, 10);
     File file = new File("res/" + filename + ".txt");
     if (!file.exists()) {
@@ -188,6 +189,11 @@ public class Input implements Finals {
     Collections.sort(transactionList);
   }
 
+  /**
+   * служит для выбора типа записи РАСХОД/ДОХОД
+   *
+   * @return возвращает выбранный тип записи (enum)
+   */
   public static TransactionType takeType() throws IOException {
     int lastOfNum = 1;
     System.out.println("Выберите тип категории:");
@@ -206,6 +212,12 @@ public class Input implements Finals {
     return priority;
   }
 
+  /**
+   * создает новую категорию, записыает ее в выбранный тип записи
+   * (списки категорий храняться отдельно в enum INCOMING/OUTGOING)
+   *
+   * @param br BufferedReader, для считывания ввода пользователя
+   */
   public static void addCategory(BufferedReader br) throws IOException {
     System.out.println();
     System.out.println(BLUE + "[ ДОБАВЛЕНИЕ НОВОЙ КАТЕГОРИИ ]" + RESET);
@@ -221,6 +233,12 @@ public class Input implements Finals {
     transactionType.getCategoryList().add(new Category(title));
   }
 
+  /**
+   * служит для выбора категории пользователем
+   *
+   * @param transactionType выбранный тип записи (enum)
+   * @return возвращает ссылку на выбранную категорию
+   */
   public static Category takeCategory(TransactionType transactionType) throws IOException {
     List<Category> categoryList = transactionType.getCategoryList();
     System.out.println("Выберите категорию:");
@@ -232,6 +250,11 @@ public class Input implements Finals {
     return categoryList.get(choice);
   }
 
+  /**
+   * редактирует выбранную категорию
+   *
+   * @param br BufferedReader, для считывания ввода пользователя
+   */
   public static void editCategory(BufferedReader br) throws IOException {
     System.out.println();
     TransactionType transactionType = takeType();
@@ -248,6 +271,12 @@ public class Input implements Finals {
     category.setTitle(title);
   }
 
+  /**
+   * создает новую валюту и добавляет ее в список доступных валют
+   *
+   * @param br           BufferedReader, для считывания ввода пользователя
+   * @param currencyList список доступных валют
+   */
   public static void addCurrency(BufferedReader br, List<Currency> currencyList) throws IOException {
     System.out.println();
     System.out.println(BLUE + "[ ДОБАВЛЕНИЕ НОВОЙ ВАЛЮТЫ ]" + RESET);
@@ -273,6 +302,12 @@ public class Input implements Finals {
     currencyList.add(new Currency(title, acronym, total));
   }
 
+  /**
+   * служит для выбора валюты пользователем
+   *
+   * @param currencyList список доступных валют
+   * @return возвращает ссылку на выбранную валюту
+   */
   public static Currency takeCurrency(List<Currency> currencyList) throws IOException {
     System.out.println("Выберите валюту:");
     for (int i = 0; i < currencyList.size(); i++) {
