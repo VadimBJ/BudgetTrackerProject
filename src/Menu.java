@@ -8,7 +8,15 @@ import java.util.Map;
 
 
 public class Menu implements Finals {
+  private static boolean isRepeat = true;
 
+  /**
+   * стартовое меню для авторизации пользователя
+   *
+   * @param transactionList список созданных записей
+   * @param currencyList    список доступных валют
+   * @param userData        данные пользователей для авторизации
+   */
   public static void menuLogin(List<Transaction> transactionList,
                                List<Currency> currencyList, Map<String, String> userData) throws IOException, InterruptedException {
     boolean isLogin = false;
@@ -36,10 +44,16 @@ public class Menu implements Finals {
     } while (!isLogin);
   }
 
+  /**
+   * главное меню программы
+   *
+   * @param transactionList список созданных записей
+   * @param currencyList    список доступных валют
+   */
   public static void menuMain(List<Transaction> transactionList,
                               List<Currency> currencyList) throws IOException, AWTException, InterruptedException {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    while (true) {
+    while (isRepeat) {
       Output.clearScreen();
       System.out.println(LOGO2);
       System.out.println();
@@ -70,11 +84,17 @@ public class Menu implements Finals {
         case 7 -> Input.addCurrency(br, currencyList);
         case 8 -> menuEditCategoryCurrency(br, currencyList);
         case 9 -> Output.writeToEncryptFile(transactionList, currencyList);
-        case 0 -> menuExit(transactionList,currencyList);
+        case 0 -> menuExit(transactionList, currencyList);
       }
     }
   }
 
+  /**
+   * меню для выхода из программы
+   *
+   * @param transactionList список созданных записей
+   * @param currencyList    список доступных валют
+   */
   public static void menuExit(List<Transaction> transactionList, List<Currency> currencyList) throws IOException,
       InterruptedException, AWTException {
     System.out.println();
@@ -87,20 +107,29 @@ public class Menu implements Finals {
     int choice = Input.readIntLimited(1, 2);
     switch (choice) {
       case 1 -> {
+        isRepeat = false;
         Output.writeToEncryptFile(transactionList, currencyList);
         Output.clearScreen();
         BudgetTrackerRunner.main(new String[]{});
       }
       case 2 -> {
+        isRepeat = false;
         Output.writeToEncryptFile(transactionList, currencyList);
         System.out.println();
-        System.out.println(BLUE+"До скорой встречи!"+RESET);
+        System.out.println(BLUE + "До скорой встречи!" + RESET);
         System.out.println();
         System.exit(0);
       }
     }
   }
 
+  /**
+   * меню для выбора способа фильтрации записей
+   *
+   * @param br              BufferedReader, для считывания ввода пользователя
+   * @param transactionList список созданных записей
+   * @param currencyList    список доступных валют
+   */
   public static void menuFilterTransaction(BufferedReader br, List<Transaction> transactionList,
                                            List<Currency> currencyList) throws IOException, InterruptedException, AWTException {
     System.out.println();
@@ -122,6 +151,12 @@ public class Menu implements Finals {
 
   }
 
+  /**
+   * меню для выбора объекта редактирования
+   *
+   * @param br           BufferedReader, для считывания ввода пользователя
+   * @param currencyList список доступных валют
+   */
   public static void menuEditCategoryCurrency(BufferedReader br, List<Currency> currencyList) throws IOException {
     System.out.println();
     System.out.println(BLUE + "[ ВЫБОР ОБЪЕКТА ДЛЯ РЕДАКТИРОВАНИЯ ]" + RESET);
