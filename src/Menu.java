@@ -55,7 +55,16 @@ public class Menu implements Finals {
     isRepeat = true;
     while (isRepeat) {
       Output.clearScreen();
-      System.out.println(LOGO2);
+      int size = transactionList.size();
+      String transactionCount = "Создано записей: "+size;
+      String logo2 = String.format("""
+              
+      %s   ┌─                ─┐
+      %s═══╡│%s Budget Tracker%s │╞════════━━━━━┅┅┅┅┅┅┄┄%s┄┄┄┈┈┈┈
+      %s   └─                ─┘%s%27s%s
+        """, YELLOW, CYAN, YELLOW, CYAN, YELLOW, CYAN, YELLOW, transactionCount, RESET);
+
+      System.out.printf(logo2);
       System.out.println();
       System.out.println(BLUE + "[ ОСНОВНОЕ МЕНЮ ]" + RESET);
       System.out.println("""
