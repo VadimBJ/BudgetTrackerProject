@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Menu implements Finals {
-  private static boolean isRepeat = true;
+  private static boolean isRepeat;
 
   /**
    * стартовое меню для авторизации пользователя
@@ -52,6 +52,7 @@ public class Menu implements Finals {
   public static void menuMain(List<Transaction> transactionList,
                               List<Currency> currencyList) throws IOException, AWTException, InterruptedException {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    isRepeat = true;
     while (isRepeat) {
       Output.clearScreen();
       System.out.println(LOGO2);
