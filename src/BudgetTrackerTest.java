@@ -18,7 +18,7 @@ class BudgetTrackerTest {
 
   @Test
   @Order(1)
-  @DisplayName("Тестируем создание категорий")
+  @DisplayName("1. Тестируем создание категорий")
   public void addCategoryTest() {
     transactionTypeIncoming.getCategoryList().add(new Category("Доходы"));
     transactionTypeOutgoing.getCategoryList().add(new Category("Расходы"));
@@ -29,7 +29,7 @@ class BudgetTrackerTest {
 
   @Test
   @Order(2)
-  @DisplayName("Тестируем создание валют")
+  @DisplayName("2. Тестируем создание валют")
   public void addCurrencyTest() {
     currencyList.add(new Currency("US dollar", "USD", 1000));
 
@@ -40,7 +40,7 @@ class BudgetTrackerTest {
 
   @Test
   @Order(3)
-  @DisplayName("Тестируем создание записи")
+  @DisplayName("3. Тестируем создание записи")
   public void addTransactionTest() {
     Category category = transactionTypeIncoming.getCategoryList().get(0);
     currencyList.add(new Currency("US dollar", "USD", 1000));
@@ -58,7 +58,7 @@ class BudgetTrackerTest {
 
   @Test
   @Order(4)
-  @DisplayName("Тестируем перевод Date в String")
+  @DisplayName("4. Тестируем перевод Date в String")
   public void dateToStringTest() throws ParseException {
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy  HH:mm");
     Date currentDate = dateFormat.parse("20.04.2023  17:25");
@@ -70,7 +70,7 @@ class BudgetTrackerTest {
 
   @Test
   @Order(5)
-  @DisplayName("Тестируем перевод String в Date")
+  @DisplayName("5. Тестируем перевод String в Date")
   public void stringToDateTest() throws ParseException {
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy  HH:mm");
     Date currentDate = dateFormat.parse("20.04.2023  17:25");
@@ -82,7 +82,7 @@ class BudgetTrackerTest {
 
   @Test
   @Order(6)
-  @DisplayName("Тестируем создание хеш пароля")
+  @DisplayName("6. Тестируем создание хеш пароля")
   public void passwordHashTest() {
     String login = "Vadim";
     String password = "123456";
@@ -90,4 +90,16 @@ class BudgetTrackerTest {
 
     assertEquals(passwordHash, User.makeHash(password, login));
   }
+
+  @Test
+  @Order(7)
+  @DisplayName("7. Тестируем шифровку/расшифровку")
+  public void encryptionDecryptionTest() {
+    String line = "Тестовая строка для проверки шифрования";
+    String encryptedLine = Encryption.encryptStrCesar(line, 17);
+    String decryptedLine = Encryption.decryptStrCesar(encryptedLine, 17);
+
+    assertEquals(line,decryptedLine);
+  }
+
 }
