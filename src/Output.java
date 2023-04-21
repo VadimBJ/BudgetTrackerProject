@@ -7,7 +7,11 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class Output implements Finals {
-
+  /**
+   * сохраняет данные авторизации пользователей в зашифрованный файл
+   *
+   * @param userData хранит в себе пары login:passwordHash
+   */
   public static void saveLoginFile(Map<String, String> userData) throws IOException {
     File file = new File("res/dd2495l.txt");
     if (!file.exists()) {
@@ -27,6 +31,13 @@ public class Output implements Finals {
     fileWriter.close();
   }
 
+  /**
+   * сохраняет данные пользователя в зашифрованный файл
+   * (в качестве имени файла используется часть хеша пароля пользователя)
+   *
+   * @param transactionList список созданных записей
+   * @param currencyList    список доступных валют
+   */
   public static void writeToEncryptFile(List<Transaction> transactionList,
                                         List<Currency> currencyList) throws IOException, InterruptedException {
     String filename = Input.getUser().getPasswordHash().substring(2, 10);
@@ -44,7 +55,7 @@ public class Output implements Finals {
     }
     FileWriter fileWriter = new FileWriter(file);
     System.out.println();
-    System.out.print("FILE ENCRYPTION ");
+    System.out.print("FILE ENCRYPTION |\u2009");
 
     //выгружаем категории по типам операции
     String type = TransactionType.INCOMING.name();
@@ -85,8 +96,10 @@ public class Output implements Finals {
 
     //выгружаем все записи
     fileWriter.write(Encryption.encryptStrCesar(String.valueOf(transactionList.size()), 17) + "\n");
+    int count = 0;
     for (Transaction transaction : transactionList) {
-      System.out.print("▌");
+      ++count;
+      if (count < 70) System.out.print("▌");
       TimeUnit.MILLISECONDS.sleep(5);
       resultStr = new StringBuilder();
       resultStr.append(transaction.getTitle()).append(";");
@@ -100,22 +113,39 @@ public class Output implements Finals {
     }
 
     fileWriter.close();
-    System.out.println();
+    System.out.println("|");
     System.out.println(GREEN + "... Файл сохранен ..." + RESET);
   }
 
+  /**
+   * выводит на экран любой список переданный в метод
+   *
+   * @param listToPrint список для вывода на экран
+   */
   public static void printList(List<?> listToPrint) {
     for (Object obj : listToPrint) {
       System.out.println(obj);
     }
   }
 
+  /**
+   * выводит на экран сводную таблицу по валютам
+   *
+   * @param currencyList список доступных валют
+   */
   public static void printCurrencyTotal(List<Currency> currencyList) {
     System.out.println("      ╭" + "─".repeat(37) + "[\u001B[34m Общая сумма по валютам \u001B[0m]" + "─".repeat(38) + "╮");
     printList(currencyList);
     System.out.println("      ╰" + "─".repeat(101) + "╯");
   }
 
+  /**
+   * выводит на экран общую таблицу всех записец одной таблицей
+   *
+   * @param br              BufferedReader, для считывания ввода пользователя
+   * @param transactionList список созданных записей
+   * @param currencyList    список доступных валют
+   */
   public static void printTransactionAll(BufferedReader br, List<Transaction> transactionList,
                                          List<Currency> currencyList) throws AWTException, InterruptedException, IOException {
     clearScreen();
@@ -123,7 +153,7 @@ public class Output implements Finals {
       System.out.println(RED + "⛔ Перед просмотром Вам необходимо создать хотя бы одну запись!" + RESET);
       System.out.println();
       System.out.println(" === Нажмите ENTER для возврата в главное меню === ");
-      String wait = br.readLine();
+      System.out.println(br.readLine());
       return;
     }
     printCurrencyTotal(currencyList);
@@ -143,14 +173,21 @@ public class Output implements Finals {
     Menu.menuAfterTransactionListEnds(br, transactionList, currencyList, false);
   }
 
-  public static void printTransactionBy10(List<Transaction> transactionList, List<Currency> currencyList) throws AWTException, InterruptedException, IOException {
+  /**
+   * выводит на экран общую таблицу всех записей страницами по 10 записей
+   *
+   * @param transactionList список созданных записей
+   * @param currencyList    список доступных валют
+   */
+  public static void printTransactionBy10(List<Transaction> transactionList, List<Currency> currencyList)
+      throws AWTException, InterruptedException, IOException {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     if (currencyList.size() == 0 || transactionList.size() == 0) {
       clearScreen();
       System.out.println(RED + "⛔ Перед просмотром Вам необходимо создать хотя бы одну запись!" + RESET);
       System.out.println();
       System.out.println(" === Нажмите ENTER для возврата в главное меню === ");
-      String wait = br.readLine();
+      System.out.println(br.readLine());
       return;
     }
     int end = transactionList.size();
@@ -192,7 +229,15 @@ public class Output implements Finals {
     }
   }
 
-
+  /**
+   * выводит на экран общую таблицу всех записей за заданный период
+   *
+   * @param br              BufferedReader, для считывания ввода пользователя
+   * @param transactionList список созданных записей
+   * @param currencyList    список доступных валют
+   * @param firstDate       начальная дата периода
+   * @param lastDate        конечная дата периода
+   */
   public static void printTransactionByDate(BufferedReader br, List<Transaction> transactionList,
                                             List<Currency> currencyList,
                                             Date firstDate, Date lastDate) throws AWTException, InterruptedException, IOException {
@@ -201,7 +246,7 @@ public class Output implements Finals {
       System.out.println(RED + "⛔ Перед просмотром Вам необходимо создать хотя бы одну запись!" + RESET);
       System.out.println();
       System.out.println(" === Нажмите ENTER для возврата в главное меню === ");
-      String wait = br.readLine();
+      System.out.println(br.readLine());
       return;
     }
 
@@ -224,6 +269,16 @@ public class Output implements Finals {
     Menu.menuAfterTransactionListEnds(br, transactionList, currencyList, false);
   }
 
+  /**
+   * выводит на экран детальную информацию о записи по ее индексу
+   *
+   * @param br              BufferedReader, для считывания ввода пользователя
+   * @param transactionList список созданных записей
+   * @param currencyList    список доступных валют
+   * @param index           индекс записи в transactionList
+   * @param isList10        служит для отслеживания места откуда было вызвано меню
+   *                        и проброса этого параметра в menuAnderTransactionView
+   */
   public static void showTransactionById(BufferedReader br, List<Transaction> transactionList,
                                          List<Currency> currencyList, int index, boolean isList10) throws IOException, InterruptedException, AWTException {
     clearScreen();
@@ -256,20 +311,22 @@ public class Output implements Finals {
           System.out.print("│    ");
           symbolCount = 0;
         }
-
-
       }
-
       System.out.println();
     }
     System.out.println("│    ");
     System.out.println("│    " + date);
     System.out.println("╰" + "─".repeat(45) + "┈┈┈┈┈┄┄┄┄┄┄");
     Menu.menuAnderTransactionView(br, transactionList, currencyList, ind, isList10);
-
   }
 
-
+  /**
+   * выводит на экран общую таблицу всех записей отфильтрованных по типу транзакции
+   *
+   * @param br              BufferedReader, для считывания ввода пользователя
+   * @param transactionList список созданных записей
+   * @param currencyList    список доступных валют
+   */
   public static void printTransactionFilteredByType(BufferedReader br, List<Transaction> transactionList,
                                                     List<Currency> currencyList) throws IOException, InterruptedException, AWTException {
     TransactionType transactionType = Input.takeType();
@@ -305,6 +362,13 @@ public class Output implements Finals {
     Menu.menuAfterTransactionListEnds(br, transactionList, currencyList, false);
   }
 
+  /**
+   * выводит на экран общую таблицу всех записей отфильтрованных по категории транзакции
+   *
+   * @param br              BufferedReader, для считывания ввода пользователя
+   * @param transactionList список созданных записей
+   * @param currencyList    список доступных валют
+   */
   public static void printTransactionFilteredByCategory(BufferedReader br, List<Transaction> transactionList,
                                                         List<Currency> currencyList) throws IOException, InterruptedException, AWTException {
     TransactionType transactionType = Input.takeType();
@@ -338,6 +402,13 @@ public class Output implements Finals {
     Menu.menuAfterTransactionListEnds(br, transactionList, currencyList, false);
   }
 
+  /**
+   * выводит на экран общую таблицу всех записей отфильтрованных по валюте транзакции
+   *
+   * @param br              BufferedReader, для считывания ввода пользователя
+   * @param transactionList список созданных записей
+   * @param currencyList    список доступных валют
+   */
   public static void printTransactionFilteredByCurrency(BufferedReader br, List<Transaction> transactionList,
                                                         List<Currency> currencyList) throws IOException, InterruptedException, AWTException {
     Currency currencyFilter = Input.takeCurrency(currencyList);
@@ -359,13 +430,16 @@ public class Output implements Finals {
     System.out.println("      ╭" + "─".repeat(32) +
         "[\u001B[34m Итоговая сумма в выбранной валюте \u001B[0m]" + "─".repeat(32) + "╮");
 
-      String line = String.format("%s : %15.2f %3s", currencyFilter.getTitle(), currencyFilter.getTotal(), currencyFilter.getAcronym());
-      System.out.printf("      │ %99s │%n", line);
+    String line = String.format("%s : %15.2f %3s", currencyFilter.getTitle(), currencyFilter.getTotal(), currencyFilter.getAcronym());
+    System.out.printf("      │ %99s │%n", line);
 
     System.out.println("      ╰" + "─".repeat(101) + "╯");
     Menu.menuAfterTransactionListEnds(br, transactionList, currencyList, false);
   }
 
+  /**
+   * очищает экран с задержкой в 50 миллисекунд
+   */
   public static void clearScreen() throws AWTException, InterruptedException {
     Robot robot = new Robot();
     robot.keyPress(KeyEvent.VK_CONTROL);
