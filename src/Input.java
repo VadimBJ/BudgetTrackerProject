@@ -22,6 +22,8 @@ public class Input implements Finals {
    */
   public static void initializeData(List<Currency> currencyList) {
     //инициализация категорий
+    TransactionType.INCOMING.getCategoryList().clear();
+    TransactionType.OUTGOING.getCategoryList().clear();
     TransactionType.INCOMING.getCategoryList().add(new Category("Доходы"));
     TransactionType.OUTGOING.getCategoryList().add(new Category("Расходы"));
 
@@ -318,6 +320,12 @@ public class Input implements Finals {
     return currencyList.get(choice);
   }
 
+  /**
+   * редактирует выбранную валюту
+   *
+   * @param br           BufferedReader, для считывания ввода пользователя
+   * @param currencyList список доступных валют
+   */
   public static void editCurrency(BufferedReader br, List<Currency> currencyList) throws IOException {
     System.out.println();
     Currency currency = takeCurrency(currencyList);
@@ -341,6 +349,13 @@ public class Input implements Finals {
     currency.setAcronym(acronym);
   }
 
+  /**
+   * создает новую запись о транзакции и добавляет ее в список созданных записей
+   *
+   * @param br              BufferedReader, для считывания ввода пользователя
+   * @param transactionList список созданных записей
+   * @param currencyList    список доступных валют
+   */
   public static void addTransaction(BufferedReader br, List<Transaction> transactionList,
                                     List<Currency> currencyList) throws IOException {
     System.out.println();
@@ -367,13 +382,21 @@ public class Input implements Finals {
     System.out.println(GREEN + "... Запись добавлена ..." + RESET);
   }
 
+  /**
+   * редактируем выбранную запись о транзакции
+   *
+   * @param br              BufferedReader, для считывания ввода пользователя
+   * @param transactionList список созданных записей
+   * @param currencyList    список доступных валют
+   * @param index           индекс записи в transactionList
+   */
   public static void editTransaction(BufferedReader br, List<Transaction> transactionList,
                                      List<Currency> currencyList, int index) throws IOException {
     String num;
     if (String.valueOf(index).length() < 3) {
       num = "000" + (transactionList.size() - index);
       num = num.substring(num.length() - 3);
-    } else num = String.valueOf(index);
+    } else num = String.valueOf(transactionList.size() - index);
     System.out.println();
     System.out.println(BLUE + "[ РЕДАКТИРОВАНИЕ ЗАПИСИ " + num + " ]" + RESET);
     System.out.println();
@@ -409,6 +432,12 @@ public class Input implements Finals {
     System.out.println(GREEN + "... Запись отредактирована ..." + RESET);
   }
 
+  /**
+   * удаление запись о транзакции по индексу
+   *
+   * @param transactionList список созданных записей
+   * @param index           индекс записи в transactionList
+   */
   public static void deleteTransaction(List<Transaction> transactionList, int index) {
     double amount = transactionList.get(index).getAmount();
     double total = transactionList.get(index).getCurrency().getTotal();
@@ -416,11 +445,24 @@ public class Input implements Finals {
     transactionList.remove(index);
   }
 
+  /**
+   * переводит переменную из Date в String
+   *
+   * @param currentDate дата для преобразования
+   * @param format      шаблон для отображения даты
+   * @return возвращает строку содержащую дату в заданном шаблоне
+   */
   public static String dateToString(Date currentDate, String format) {
     SimpleDateFormat dateFormat = new SimpleDateFormat(format);
     return dateFormat.format(currentDate);
   }
 
+  /**
+   * переводит строку в формат Date
+   *
+   * @param dateString строка с датой
+   * @return возвращает дату с типом Date или null если была ошибка
+   */
   public static Date dateFromString(String dateString) {
     Date currentDate = null;
     SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy  HH:mm");
@@ -432,6 +474,13 @@ public class Input implements Finals {
     return currentDate;
   }
 
+  /**
+   * считывает целое число с клавиатуры в заданных рамках
+   *
+   * @param min минимальное допустимое значение
+   * @param max максимальное допустимое значение
+   * @return возвращает целое число в заданых рамках
+   */
   public static int readIntLimited(int min, int max) throws IOException {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     int num = -1;
@@ -448,6 +497,13 @@ public class Input implements Finals {
     return num;
   }
 
+  /**
+   * считывает дробное число с клавиатуры в заданных рамках
+   *
+   * @param min минимальное допустимое значение
+   * @param max максимальное допустимое значение
+   * @return возвращает дробное число в заданых рамках
+   */
   public static double readDoubleLimited(double min, double max) throws IOException {
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     boolean isWrong = true;
