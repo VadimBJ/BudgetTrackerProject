@@ -10,7 +10,7 @@ public class BudgetTrackerRunner implements Finals {
     List<Transaction> transactionList = new ArrayList<>();
 
     System.out.printf(LOGO, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW,
-        BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, RESET);
+        BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE, YELLOW, BLUE,YELLOW,  RESET);
     System.out.println("""
            
            Добро пожаловать в бюджет-трекер!
