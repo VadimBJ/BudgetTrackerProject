@@ -18,6 +18,7 @@ public class Transaction implements Finals, Comparable<Transaction> {
    * @param type        INCOMING/OUTGOING
    * @param currency    валюта
    * @param amount      сумма транзакции
+   * @param date        дата транзакции
    */
   public Transaction(String title, String description, TransactionType type, Category category, Currency currency,
                      double amount, Date date) {
@@ -31,6 +32,11 @@ public class Transaction implements Finals, Comparable<Transaction> {
     this.date = date;
   }
 
+  /**
+   * формирует строку с записью транзакции в виде таблицы
+   *
+   * @return возвращает строку с записью транзакции в виде таблицы
+   */
   @Override
   public String toString() {
     String sign = type == TransactionType.INCOMING ? "➕" : "➖";
@@ -48,6 +54,12 @@ public class Transaction implements Finals, Comparable<Transaction> {
         + "    ├" + "─".repeat(101) + "┤";
   }
 
+  /**
+   * формирует строку с записью транзакции в виде таблицы с указанием индекса
+   *
+   * @param i порядковый индекс транзакции в таблице
+   * @return возвращает строку с записью транзакции в виде таблицы с указанием индекса
+   */
   public String printString(int i) {
     String sign = type == TransactionType.INCOMING ? "➕" : "➖";
     String summa = String.format("%s%.2f %s", sign, Math.abs(amount), currency.getAcronym());
@@ -123,7 +135,6 @@ public class Transaction implements Finals, Comparable<Transaction> {
 
   @Override
   public int compareTo(Transaction obj) {
-//    return obj.getDate().compareTo(this.date);
     return this.date.compareTo(obj.getDate());
   }
 }
