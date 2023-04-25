@@ -129,6 +129,31 @@ public class Output implements Finals {
   }
 
   /**
+   * Выводит на экран список всех наявных валют и категорий
+   *
+   * @param br              BufferedReader, для считывания ввода пользователя
+   * @param currencyList    список доступных валют
+   */
+  public static void showAllCategoryCurrency(BufferedReader br, List<Currency> currencyList) throws IOException {
+    System.out.println();
+    System.out.println(BLUE+"Доступные валюты:"+RESET);
+    for (Currency currency : currencyList) {
+      System.out.println("  - "+currency.getTitle()+" : "+currency.getAcronym());
+    }
+    System.out.println();
+    System.out.println(BLUE+"Доступные категории:"+RESET);
+    System.out.println(TransactionType.INCOMING.getTitle());
+    for (Category category : TransactionType.INCOMING.getCategoryList()) {
+      System.out.println("  - "+category.getTitle());
+    }
+    System.out.println(TransactionType.OUTGOING.getTitle());
+    for (Category category : TransactionType.OUTGOING.getCategoryList()) {
+      System.out.println("  - "+category.getTitle());
+    }
+    Menu.menuEditCategoryCurrency(br,currencyList);
+  }
+
+  /**
    * выводит на экран сводную таблицу по валютам
    *
    * @param currencyList список доступных валют

@@ -62,6 +62,8 @@ public class Input implements Finals {
       System.out.println("Возможно Вам нужен пункт регистрации нового пользователя");
       return false;
     }
+    TransactionType.INCOMING.getCategoryList().clear();
+    TransactionType.OUTGOING.getCategoryList().clear();
     user = new User(login, password);
     return true;
   }
